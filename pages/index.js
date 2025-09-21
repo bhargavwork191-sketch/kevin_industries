@@ -195,6 +195,17 @@ export default function Home() {
       if (response.ok) {
         const adminImages = await response.json()
         if (adminImages.length > 0) {
+          // Preload images for better performance
+          const imagePromises = adminImages.map(img => {
+            return new Promise((resolve) => {
+              const image = new Image()
+              image.onload = () => resolve(img.url)
+              image.onerror = () => resolve(img.url) // Still use the URL even if preload fails
+              image.src = img.url
+            })
+          })
+          
+          await Promise.all(imagePromises)
           setCarouselImages(adminImages.map(img => img.url))
           return
         }
@@ -216,6 +227,17 @@ export default function Home() {
       if (response.ok) {
         const adminImages = await response.json()
         if (adminImages.length > 0) {
+          // Preload images for better performance
+          const imagePromises = adminImages.map(img => {
+            return new Promise((resolve) => {
+              const image = new Image()
+              image.onload = () => resolve(img.url)
+              image.onerror = () => resolve(img.url) // Still use the URL even if preload fails
+              image.src = img.url
+            })
+          })
+          
+          await Promise.all(imagePromises)
           setManufacturingImages(adminImages.map(img => img.url))
           setLoading(false)
           return
@@ -333,14 +355,19 @@ export default function Home() {
                       src={carouselImages[currentImageIndex]} 
                       alt={`Manufacturing Process ${currentImageIndex + 1}`}
                       className="carousel-image"
+                      loading="eager"
+                      onError={(e) => {
+                        console.error('Image failed to load:', e.target.src);
+                        e.target.style.display = 'none';
+                      }}
                     />
                     <div className="carousel-overlay">
                       <div className="carousel-info">
                         <h4>Precision Component #{currentImageIndex + 1}</h4>
                         <p>Manufactured with advanced tooling and casting techniques</p>
-                </div>
-              </div>
-            </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <button 
                     className="carousel-arrow carousel-arrow-right"
@@ -438,13 +465,17 @@ export default function Home() {
               <h2>Our Manufacturing Excellence</h2>
               <p className="section-subtitle">Real products showcasing our precision engineering capabilities</p>
             </div>
-          <div className="gallery-grid">
+            <div className="gallery-grid">
               {manufacturingImages.map((image, index) => (
                 <div key={index} className="gallery-item">
                   <img 
                     src={image} 
                     alt={`Manufacturing Process ${index + 1}`}
                     loading="lazy"
+                    onError={(e) => {
+                      console.error('Gallery image failed to load:', e.target.src);
+                      e.target.style.display = 'none';
+                    }}
                   />
                   <div className="gallery-overlay">
                     <div className="gallery-info">
@@ -452,8 +483,8 @@ export default function Home() {
                       <p>Manufactured with advanced tooling and casting techniques</p>
                     </div>
                   </div>
-              </div>
-            ))}
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -481,6 +512,7 @@ export default function Home() {
           grid-template-columns: 1fr 1fr;
           gap: 60px;
           align-items: center;
+          min-height: 70vh;
         }
 
         /* Elegant Carousel Section */
@@ -488,14 +520,15 @@ export default function Home() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 24px;
+          justify-content: center;
+          height: 100%;
+          width: 100%;
         }
 
         .carousel-container {
           position: relative;
           width: 100%;
-          max-width: 700px;
-          height: 500px;
+          height: 400px;
           border-radius: 20px;
           overflow: hidden;
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -573,7 +606,7 @@ export default function Home() {
         .carousel-indicators {
           display: flex;
           gap: 12px;
-          margin-top: 16px;
+          margin-top: 20px;
         }
 
         .indicator {
@@ -708,6 +741,13 @@ export default function Home() {
           font-size: 14px;
           color: #cbd5e1;
           margin: 0;
+        }
+
+        /* Container */
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px;
         }
 
         /* Capabilities Section */
@@ -874,6 +914,7 @@ export default function Home() {
             grid-template-columns: 1fr;
             gap: 40px;
             text-align: center;
+            min-height: auto;
           }
 
           .hero-title {
@@ -893,8 +934,9 @@ export default function Home() {
           }
 
           .carousel-container {
-            max-width: 500px;
-            height: 400px;
+            width: 100%;
+            height: 350px;
+            max-width: 600px;
           }
         }
 
@@ -929,8 +971,9 @@ export default function Home() {
           }
 
           .carousel-container {
-            max-width: 400px;
-            height: 350px;
+            width: 100%;
+            height: 300px;
+            max-width: 500px;
           }
 
           .carousel-arrow {
@@ -958,8 +1001,9 @@ export default function Home() {
           }
 
           .carousel-container {
-            max-width: 350px;
-            height: 300px;
+            width: 100%;
+            height: 250px;
+            max-width: 400px;
           }
 
           .carousel-arrow {
