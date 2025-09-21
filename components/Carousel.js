@@ -8,26 +8,12 @@ export default function Carousel({ page = 'carousel' }) {
   const [imgs, setImgs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fallback images for different pages
-  const fallbackImages = {
-    carousel: [
-      '/product_images/WhatsApp Image 2025-09-16 at 9.06.03 PM.jpeg',
-      '/product_images/WhatsApp Image 2025-09-16 at 9.06.09 PM (1).jpeg',
-      '/product_images/WhatsApp Image 2025-09-16 at 9.06.09 PM (2).jpeg',
-      '/product_images/WhatsApp Image 2025-09-16 at 9.06.09 PM (4).jpeg',
-      '/product_images/WhatsApp Image 2025-09-16 at 9.06.22 PM.jpeg'
-    ],
-    'home-side': [
-      '/product_images/WhatsApp Image 2025-09-16 at 9.06.59 PM (1).jpeg',
-      '/product_images/WhatsApp Image 2025-09-16 at 9.07.00 PM (1).jpeg',
-      '/product_images/WhatsApp Image 2025-09-16 at 9.12.27 PM (1).jpeg'
-    ]
-  };
+  // No fallback images - only use admin uploads
 
   useEffect(() => {
     const loadImages = async () => {
       try {
-        // Try to load from admin API first
+        // Only load from admin API - no fallbacks
         const response = await fetch(`/api/admin/images?page=${page}`);
         if (response.ok) {
           const adminImages = await response.json();
@@ -37,27 +23,16 @@ export default function Carousel({ page = 'carousel' }) {
               image_url: img.url,
               alt: img.alt
             })));
-            setLoading(false);
-            return;
+          } else {
+            // No images uploaded yet
+            setImgs([]);
           }
+        } else {
+          setImgs([]);
         }
-        
-        // Fallback to static images
-        const fallback = fallbackImages[page] || fallbackImages.carousel;
-        setImgs(fallback.map((url, index) => ({
-          id: `fallback-${index}`,
-          image_url: url,
-          alt: `Manufacturing Process ${index + 1}`
-        })));
       } catch (error) {
         console.error('Error loading carousel images:', error);
-        // Use fallback images
-        const fallback = fallbackImages[page] || fallbackImages.carousel;
-        setImgs(fallback.map((url, index) => ({
-          id: `fallback-${index}`,
-          image_url: url,
-          alt: `Manufacturing Process ${index + 1}`
-        })));
+        setImgs([]);
       }
       setLoading(false);
     };

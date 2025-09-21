@@ -3,16 +3,14 @@ import fs from 'fs'
 import path from 'path'
 import { v2 as cloudinary } from 'cloudinary'
 
-// Configure Cloudinary if environment variables are available
-if (process.env.CLOUDINARY_CLOUD_NAME) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  })
-}
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
-// For persistent storage, we'll use a JSON file + Cloudinary
+// For persistent storage, we'll use Cloudinary + JSON file
 const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json')
 
 // Ensure data directory exists
@@ -66,7 +64,7 @@ export default async function handler(req, res) {
     }
   } 
   else if (req.method === 'POST') {
-    // Upload new image
+    // Upload new image to Cloudinary
     try {
       const form = formidable({
         keepExtensions: true,
@@ -81,51 +79,24 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'No image provided' })
       }
 
+      // Upload to Cloudinary
+      const result = await cloudinary.uploader.upload(image.filepath, {
+        folder: 'kevin-industries',
+        resource_type: 'auto',
+        quality: 'auto',
+        fetch_format: 'auto'
+      })
+
       // Generate unique ID
       const timestamp = Date.now()
       const filename = `image_${timestamp}`
-
-      let imageUrl, cloudinaryId = null
-
-      // Try Cloudinary first if configured
-      if (process.env.CLOUDINARY_CLOUD_NAME) {
-        try {
-          const result = await cloudinary.uploader.upload(image.filepath, {
-            folder: 'kevin-industries',
-            resource_type: 'auto',
-            quality: 'auto',
-            fetch_format: 'auto',
-            public_id: `kevin-industries/${filename}`
-          })
-          imageUrl = result.secure_url
-          cloudinaryId = result.public_id
-        } catch (cloudinaryError) {
-          console.error('Cloudinary upload failed, falling back to local storage:', cloudinaryError)
-        }
-      }
-
-      // Fallback to local storage if Cloudinary fails or not configured
-      if (!imageUrl) {
-        const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
-        if (!fs.existsSync(uploadsDir)) {
-          fs.mkdirSync(uploadsDir, { recursive: true })
-        }
-
-        const ext = path.extname(image.originalFilename || '')
-        const localFilename = `${filename}${ext}`
-        const newPath = path.join(uploadsDir, localFilename)
-
-        // Move file to final location
-        fs.renameSync(image.filepath, newPath)
-        imageUrl = `/uploads/${localFilename}`
-      }
 
       // Create image record
       const newImage = {
         id: timestamp,
         filename,
-        url: imageUrl,
-        cloudinaryId,
+        url: result.secure_url,
+        cloudinaryId: result.public_id,
         alt: `Uploaded image ${timestamp}`,
         page,
         uploadedAt: new Date().toISOString()
@@ -143,7 +114,7 @@ export default async function handler(req, res) {
     }
   } 
   else if (req.method === 'DELETE') {
-    // Delete image
+    // Delete image from Cloudinary and local record
     const { id } = req.query
     
     if (!id) {
@@ -161,20 +132,12 @@ export default async function handler(req, res) {
       const image = images[imageIndex]
       
       // Delete from Cloudinary if it has cloudinaryId
-      if (image.cloudinaryId && process.env.CLOUDINARY_CLOUD_NAME) {
+      if (image.cloudinaryId) {
         try {
           await cloudinary.uploader.destroy(image.cloudinaryId)
         } catch (cloudinaryError) {
           console.error('Error deleting from Cloudinary:', cloudinaryError)
           // Continue with local deletion even if Cloudinary fails
-        }
-      }
-      
-      // Delete local file if it exists
-      if (image.url.startsWith('/uploads/')) {
-        const filePath = path.join(process.cwd(), 'public', image.url)
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath)
         }
       }
 

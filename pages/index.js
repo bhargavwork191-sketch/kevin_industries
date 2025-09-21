@@ -164,23 +164,7 @@ export default function Home() {
   const [manufacturingImages, setManufacturingImages] = useState([])
   const [loading, setLoading] = useState(true)
   
-  // Fallback images if no admin images are available
-  const fallbackCarouselImages = [
-    '/product_images/WhatsApp Image 2025-09-16 at 9.06.03 PM.jpeg', // High quality casting
-    '/product_images/WhatsApp Image 2025-09-16 at 9.06.09 PM (1).jpeg', // Precision components
-    '/product_images/WhatsApp Image 2025-09-16 at 9.06.09 PM (2).jpeg', // Manufacturing process
-    '/product_images/WhatsApp Image 2025-09-16 at 9.06.09 PM (4).jpeg', // Tool room work
-    '/product_images/WhatsApp Image 2025-09-16 at 9.06.22 PM.jpeg' // Foundry casting
-  ]
-
-  const fallbackManufacturingImages = [
-    '/product_images/WhatsApp Image 2025-09-16 at 9.06.59 PM (1).jpeg', // Machined parts
-    '/product_images/WhatsApp Image 2025-09-16 at 9.07.00 PM (1).jpeg', // Precision tools
-    '/product_images/WhatsApp Image 2025-09-16 at 9.12.27 PM (1).jpeg', // Quality components
-    '/product_images/WhatsApp Image 2025-09-16 at 9.12.28 PM (2).jpeg', // Manufacturing setup
-    '/product_images/WhatsApp Image 2025-09-16 at 9.12.28 PM (4).jpeg', // Final products
-    '/product_images/WhatsApp Image 2025-09-16 at 9.12.28 PM (5).jpeg' // Quality control
-  ]
+  // No fallback images - only use admin uploads
 
   // Load carousel images
   useEffect(() => {
@@ -190,7 +174,7 @@ export default function Home() {
 
   const loadCarouselImages = async () => {
     try {
-      // Try to load from admin API first
+      // Only load from admin API - no fallbacks
       const response = await fetch('/api/admin/images?page=carousel')
       if (response.ok) {
         const adminImages = await response.json()
@@ -207,22 +191,22 @@ export default function Home() {
           
           await Promise.all(imagePromises)
           setCarouselImages(adminImages.map(img => img.url))
-          return
+        } else {
+          // No images uploaded yet
+          setCarouselImages([])
         }
+      } else {
+        setCarouselImages([])
       }
-      
-      // Fallback to original images
-      setCarouselImages(fallbackCarouselImages)
     } catch (error) {
       console.error('Error loading carousel images:', error)
-      // Use fallback images
-      setCarouselImages(fallbackCarouselImages)
+      setCarouselImages([])
     }
   }
 
   const loadManufacturingImages = async () => {
     try {
-      // Try to load from admin API first
+      // Only load from admin API - no fallbacks
       const response = await fetch('/api/admin/images?page=manufacturing')
       if (response.ok) {
         const adminImages = await response.json()
@@ -239,17 +223,16 @@ export default function Home() {
           
           await Promise.all(imagePromises)
           setManufacturingImages(adminImages.map(img => img.url))
-          setLoading(false)
-          return
+        } else {
+          // No images uploaded yet
+          setManufacturingImages([])
         }
+      } else {
+        setManufacturingImages([])
       }
-      
-      // Fallback to original images
-      setManufacturingImages(fallbackManufacturingImages)
     } catch (error) {
       console.error('Error loading manufacturing images:', error)
-      // Use fallback images
-      setManufacturingImages(fallbackManufacturingImages)
+      setManufacturingImages([])
     }
     setLoading(false)
   }
@@ -337,6 +320,18 @@ export default function Home() {
               <div className="carousel-loading">
                 <div className="loading-spinner"></div>
                 <p>Loading carousel images...</p>
+              </div>
+            ) : carouselImages.length === 0 ? (
+              <div className="carousel-empty">
+                <div className="empty-state">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21,15 16,10 5,21"/>
+                  </svg>
+                  <h3>No Carousel Images</h3>
+                  <p>Upload images through the admin panel to display them here.</p>
+                </div>
               </div>
             ) : (
               <>
@@ -465,27 +460,41 @@ export default function Home() {
               <h2>Our Manufacturing Excellence</h2>
               <p className="section-subtitle">Real products showcasing our precision engineering capabilities</p>
             </div>
-            <div className="gallery-grid">
-              {manufacturingImages.map((image, index) => (
-                <div key={index} className="gallery-item">
-                  <img 
-                    src={image} 
-                    alt={`Manufacturing Process ${index + 1}`}
-                    loading="lazy"
-                    onError={(e) => {
-                      console.error('Gallery image failed to load:', e.target.src);
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                  <div className="gallery-overlay">
-                    <div className="gallery-info">
-                      <h4>Precision Component #{index + 1}</h4>
-                      <p>Manufactured with advanced tooling and casting techniques</p>
+            {manufacturingImages.length === 0 ? (
+              <div className="gallery-empty">
+                <div className="empty-state">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21,15 16,10 5,21"/>
+                  </svg>
+                  <h3>No Manufacturing Images</h3>
+                  <p>Upload manufacturing excellence images through the admin panel to display them here.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="gallery-grid">
+                {manufacturingImages.map((image, index) => (
+                  <div key={index} className="gallery-item">
+                    <img 
+                      src={image} 
+                      alt={`Manufacturing Process ${index + 1}`}
+                      loading="lazy"
+                      onError={(e) => {
+                        console.error('Gallery image failed to load:', e.target.src);
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                    <div className="gallery-overlay">
+                      <div className="gallery-info">
+                        <h4>Precision Component #{index + 1}</h4>
+                        <p>Manufactured with advanced tooling and casting techniques</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>
@@ -631,6 +640,46 @@ export default function Home() {
           justify-content: center;
           height: 400px;
           color: #fff;
+        }
+
+        .carousel-empty {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 400px;
+          width: 100%;
+        }
+
+        .gallery-empty {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 400px;
+          width: 100%;
+        }
+
+        .empty-state {
+          text-align: center;
+          color: var(--muted);
+          padding: 40px;
+        }
+
+        .empty-state svg {
+          color: var(--muted);
+          margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+          font-size: 24px;
+          font-weight: 600;
+          color: var(--nav);
+          margin: 0 0 8px;
+        }
+
+        .empty-state p {
+          font-size: 16px;
+          color: var(--muted);
+          margin: 0;
         }
 
         .loading-spinner {

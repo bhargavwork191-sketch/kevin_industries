@@ -1,0 +1,60 @@
+[
+  {
+    "id": 1758378845374,
+    "filename": "image_1758378845374.jpeg",
+    "url": "/uploads/image_1758378845374.jpeg",
+    "alt": "Uploaded image 1758378845374",
+    "page": "gallery",
+    "uploadedAt": "2025-09-20T14:34:05.374Z",
+    "order": 0
+  },
+  {
+    "id": 1758378837998,
+    "filename": "image_1758378837998.jpeg",
+    "url": "/uploads/image_1758378837998.jpeg",
+    "alt": "Uploaded image 1758378837998",
+    "page": "gallery",
+    "uploadedAt": "2025-09-20T14:33:57.998Z",
+    "order": 1
+  },
+  {
+    "id": 1758378883989,
+    "filename": "image_1758378883989.jpeg",
+    "url": "/uploads/image_1758378883989.jpeg",
+    "alt": "Uploaded image 1758378883989",
+    "page": "carousel",
+    "uploadedAt": "2025-09-20T14:34:43.989Z"
+  },
+  {
+    "id": 1758378894417,
+    "filename": "image_1758378894417.jpeg",
+    "url": "/uploads/image_1758378894417.jpeg",
+    "alt": "Uploaded image 1758378894417",
+    "page": "carousel",
+    "uploadedAt": "2025-09-20T14:34:54.417Z"
+  },
+  {
+    "id": 1758378944934,
+    "filename": "image_1758378944934.jpeg",
+    "url": "/uploads/image_1758378944934.jpeg",
+    "alt": "Uploaded image 1758378944934",
+    "page": "manufacturing",
+    "uploadedAt": "2025-09-20T14:35:44.934Z"
+  },
+  {
+    "id": 1758378952799,
+    "filename": "image_1758378952799.jpeg",
+    "url": "/uploads/image_1758378952799.jpeg",
+    "alt": "Uploaded image 1758378952799",
+    "page": "manufacturing",
+    "uploadedAt": "2025-09-20T14:35:52.799Z"
+  },
+  {
+    "id": 1758426769659,
+    "filename": "image_1758426769659.jpg",
+    "url": "/uploads/image_1758426769659.jpg",
+    "alt": "Uploaded image 1758426769659",
+    "page": "gallery",
+    "uploadedAt": "2025-09-21T03:52:49.659Z"
+  }
+]
