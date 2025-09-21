@@ -26,7 +26,6 @@ body {
 
 /* Ensure all elements fit within viewport */
 * {
-  max-width: 100%;
   box-sizing: border-box;
 }
 
@@ -246,18 +245,20 @@ img {
   align-items: center;
   border-radius: 6px;
   transition: all 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .mobile-menu-toggle:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.mobile-menu-toggle span{
-  width:24px;
-  height:2px;
-  background:var(--nav);
-  transition:all 0.3s ease;
-  transform-origin:center;
+.mobile-menu-toggle span {
+  width: 24px;
+  height: 2px;
+  background: var(--nav);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
 }
 
 .mobile-menu-toggle.active span:nth-child(1){
@@ -535,50 +536,13 @@ img {
   gap: 8px;
 }
 
-/* Responsive Design - Comprehensive Breakpoints */
+/* Responsive Design - Simplified Breakpoints */
 
-/* Large Laptops and Desktops (1400px+) */
-@media (min-width: 1400px) {
-  .container {
-    max-width: 1400px;
-    padding: 0 32px;
-  }
-}
-
-/* Laptops and Small Desktops (1200px - 1399px) */
-@media (max-width: 1399px) and (min-width: 1200px) {
-  .container {
-    padding: 0 24px;
-  }
-}
-
-/* Large Tablets and Small Laptops (992px - 1199px) */
-@media (max-width: 1199px) and (min-width: 992px) {
-  .container {
-    padding: 0 20px;
-  }
-  
-  .nav-links {
-    gap: 20px;
-  }
-  
-  .brand-title {
-    font-size: 20px;
-  }
-  
-  .h1 {
-    font-size: 32px;
-  }
-}
-
-/* Tablets (768px - 991px) */
-@media (max-width: 991px) and (min-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
-  
+/* Mobile Menu - Show on tablets and below */
+@media (max-width: 991px) {
   .mobile-menu-toggle {
     display: flex !important;
+    background: red !important; /* Debug: Make it visible */
   }
   
   .nav-links:not(.mobile-open) {
@@ -587,6 +551,13 @@ img {
   
   .nav-links.mobile-open {
     display: flex !important;
+  }
+}
+
+/* Tablets and below */
+@media (max-width: 991px) {
+  .container {
+    padding: 0 16px;
   }
   
   .nav {
@@ -634,8 +605,8 @@ img {
   }
 }
 
-/* Large Mobile Phones (576px - 767px) */
-@media (max-width: 767px) and (min-width: 576px) {
+/* Mobile phones */
+@media (max-width: 767px) {
   .container {
     padding: 0 16px;
   }
@@ -646,18 +617,6 @@ img {
   
   .nav {
     gap: 12px;
-  }
-  
-  .mobile-menu-toggle {
-    display: flex !important;
-  }
-  
-  .nav-links:not(.mobile-open) {
-    display: none !important;
-  }
-  
-  .nav-links.mobile-open {
-    display: flex !important;
   }
   
   .brand {
@@ -751,131 +710,7 @@ img {
   }
 }
 
-/* Medium Mobile Phones (480px - 575px) */
-@media (max-width: 575px) and (min-width: 480px) {
-  .container {
-    padding: 0 14px;
-  }
-  
-  .header {
-    padding: 10px 0;
-  }
-  
-  .nav {
-    gap: 10px;
-  }
-  
-  .mobile-menu-toggle {
-    display: flex !important;
-  }
-  
-  .nav-links:not(.mobile-open) {
-    display: none !important;
-  }
-  
-  .nav-links.mobile-open {
-    display: flex !important;
-  }
-  
-  .brand {
-    gap: 8px;
-  }
-  
-  .logo-mark {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .brand-title {
-    font-size: 15px;
-  }
-  
-  .certification-badge {
-    font-size: 8px;
-  }
-  
-  .tagline {
-    font-size: 9px;
-  }
-  
-  .h1 {
-    font-size: 22px;
-  }
-  
-  .lead {
-    font-size: 15px;
-  }
-  
-  .cta-button {
-    padding: 8px 16px;
-    font-size: 12px;
-  }
-  
-  .hero-inner {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-  }
-  
-  .hero-visual {
-    min-width: unset;
-    max-width: 100%;
-  }
-  
-  .hero-content {
-    min-width: unset;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .gallery-grid {
-    column-count: 1;
-  }
-  
-  .process {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .proc-item {
-    min-width: 80px;
-    padding: 8px 10px;
-  }
-  
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    text-align: center;
-  }
-  
-  .footer-bottom-content {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
-  }
-  
-  .nav-links.mobile-open {
-    left: 14px;
-    right: 14px;
-    top: 70px;
-    padding: 20px;
-  }
-  
-  .admin-section {
-    margin-left: auto;
-    margin-right: 0;
-  }
-  
-  .admin-link, .logout-link {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-}
-
-/* Small Mobile Phones (320px - 479px) */
+/* Small mobile phones */
 @media (max-width: 479px) {
   .container {
     padding: 0 12px;
@@ -887,18 +722,6 @@ img {
   
   .nav {
     gap: 8px;
-  }
-  
-  .mobile-menu-toggle {
-    display: flex !important;
-  }
-  
-  .nav-links:not(.mobile-open) {
-    display: none !important;
-  }
-  
-  .nav-links.mobile-open {
-    display: flex !important;
   }
   
   .brand {

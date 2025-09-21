@@ -40,6 +40,7 @@ export default function Layout({ children }) {
   }, [isMobileMenuOpen]);
 
   const toggleMobileMenu = () => {
+    console.log('🍔 Toggling mobile menu from:', isMobileMenuOpen, 'to:', !isMobileMenuOpen);
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
@@ -79,6 +80,8 @@ export default function Layout({ children }) {
     setLoginCredentials({ username: '', password: '' });
   };
 
+  console.log('🔍 Layout render - isMobileMenuOpen:', isMobileMenuOpen, 'window width:', typeof window !== 'undefined' ? window.innerWidth : 'SSR');
+  
   return (
     <div className="site-wrapper">
       {/* Fixed Professional Header */}
@@ -117,10 +120,27 @@ export default function Layout({ children }) {
               <button className="admin-link" onClick={() => { handleLoginClick(); setIsMobileMenuOpen(false); }}>Login as Admin</button>
             )}
           </div>
-          <div className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
-            <span></span>
-            <span></span>
-            <span></span>
+          <div 
+            className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`} 
+            onClick={toggleMobileMenu}
+            style={{
+              display: 'flex',
+              background: 'red',
+              minWidth: '40px',
+              minHeight: '40px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 1001,
+              flexDirection: 'column',
+              gap: '4px',
+              padding: '8px',
+              borderRadius: '6px'
+            }}
+          >
+            <span style={{ width: '24px', height: '2px', background: 'white', borderRadius: '2px' }}></span>
+            <span style={{ width: '24px', height: '2px', background: 'white', borderRadius: '2px' }}></span>
+            <span style={{ width: '24px', height: '2px', background: 'white', borderRadius: '2px' }}></span>
           </div>
         </div>
       </header>
