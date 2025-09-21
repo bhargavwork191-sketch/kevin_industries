@@ -145,33 +145,47 @@ export default async function handler(req, res) {
 
       let imageUrl, cloudinaryId = null
 
-      // Try Cloudinary first if configured
-      if (process.env.CLOUDINARY_CLOUD_NAME) {
+      // Try Supabase Storage first
+      if (supabaseAdmin) {
         try {
-          const result = await cloudinary.uploader.upload(image.filepath, {
-            folder: 'kevin-industries',
-            resource_type: 'auto',
-            quality: 'auto',
-            fetch_format: 'auto',
-            public_id: `kevin-industries/${filename}`
-          })
-          imageUrl = result.secure_url
-          cloudinaryId = result.public_id
-        } catch (cloudinaryError) {
-          console.error('Cloudinary upload failed, falling back to local storage:', cloudinaryError)
+          console.log('☁️ Uploading to Supabase Storage...')
+          
+          // Read file buffer
+          const fileBuffer = fs.readFileSync(image.filepath)
+          const ext = path.extname(image.originalFilename || '')
+          const storageFilename = `${filename}${ext}`
+          
+          // Upload to Supabase Storage
+          const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+            .from('kevin-industries-images')
+            .upload(storageFilename, fileBuffer, {
+              contentType: image.mimetype,
+              cacheControl: '3600',
+              upsert: false
+            })
+
+          if (uploadError) {
+            console.error('❌ Supabase Storage upload failed:', uploadError)
+            throw uploadError
+          }
+
+          // Get public URL
+          const { data: urlData } = supabaseAdmin.storage
+            .from('kevin-industries-images')
+            .getPublicUrl(storageFilename)
+
+          imageUrl = urlData.publicUrl
+          console.log('✅ Successfully uploaded to Supabase Storage:', imageUrl)
+          
+        } catch (storageError) {
+          console.error('❌ Supabase Storage error:', storageError)
+          // Fall back to local storage for development
         }
       }
 
-      // Fallback to local storage if Cloudinary fails or not configured
+      // Fallback to local storage if Supabase Storage fails or not configured
       if (!imageUrl) {
-        // In production (Vercel), require Cloudinary
-        if (process.env.VERCEL) {
-          return res.status(500).json({ 
-            error: 'Cloudinary is required for production uploads. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET environment variables.' 
-          })
-        }
-        
-        console.log('📁 Using local storage...')
+        console.log('📁 Using local storage fallback...')
         const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
         console.log('📂 Uploads directory:', uploadsDir)
         
@@ -205,7 +219,7 @@ export default async function handler(req, res) {
         id: timestamp,
         filename,
         url: imageUrl,
-        cloudinaryId,
+        cloudinaryId: null, // Not using Cloudinary anymore
         alt: `Uploaded image ${timestamp}`,
         type,
         uploadedAt: new Date().toISOString()
