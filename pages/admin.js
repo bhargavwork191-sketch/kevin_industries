@@ -6,9 +6,9 @@ import { useAuth } from '../contexts/AuthContext'
 export default function Admin() {
   const router = useRouter()
   const { isAuthenticated, isLoading } = useAuth()
-  const [images, setImages] = useState([])
-  const [carouselImages, setCarouselImages] = useState([])
-  const [manufacturingImages, setManufacturingImages] = useState([])
+  const [galleryImages, setGalleryImages] = useState([])
+  const [excellenceImages, setExcellenceImages] = useState([])
+  const [carosalImages, setCarosalImages] = useState([])
   const [contactMessages, setContactMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -36,19 +36,19 @@ export default function Admin() {
     setLoading(true)
     try {
       // Load gallery images
-      const galleryResponse = await fetch('/api/admin/images?page=gallery')
+      const galleryResponse = await fetch('/api/admin/images?type=gallery')
       const galleryData = await galleryResponse.json()
-      setImages(galleryData)
+      setGalleryImages(galleryData)
 
-      // Load carousel images
-      const carouselResponse = await fetch('/api/admin/images?page=carousel')
-      const carouselData = await carouselResponse.json()
-      setCarouselImages(carouselData)
+      // Load excellence images
+      const excellenceResponse = await fetch('/api/admin/images?type=excellence')
+      const excellenceData = await excellenceResponse.json()
+      setExcellenceImages(excellenceData)
 
-      // Load manufacturing images
-      const manufacturingResponse = await fetch('/api/admin/images?page=manufacturing')
-      const manufacturingData = await manufacturingResponse.json()
-      setManufacturingImages(manufacturingData)
+      // Load carosal images
+      const carosalResponse = await fetch('/api/admin/images?type=carosal')
+      const carosalData = await carosalResponse.json()
+      setCarosalImages(carosalData)
 
       // Load contact messages
       const messagesResponse = await fetch('/api/contact')
@@ -61,39 +61,56 @@ export default function Admin() {
   }
 
   const handleFileSelect = (event) => {
+    console.log('📁 File input changed')
     const file = event.target.files[0]
+    console.log('📄 Selected file:', file)
     if (file) {
+      console.log('✅ File selected, setting state')
       setSelectedFile(file)
       const reader = new FileReader()
       reader.onload = (e) => setImagePreview(e.target.result)
       reader.readAsDataURL(file)
+    } else {
+      console.log('❌ No file selected')
     }
   }
 
   const handleUpload = async () => {
-    if (!selectedFile) return
+    console.log('🚀 Upload button clicked!')
+    console.log('📁 Selected file:', selectedFile)
+    console.log('🏷️ Active tab:', activeTab)
+    
+    if (!selectedFile) {
+      console.log('❌ No file selected')
+      return
+    }
 
+    console.log('📤 Starting upload...')
     setUploading(true)
     const formData = new FormData()
     formData.append('image', selectedFile)
-    formData.append('page', activeTab)
+    formData.append('type', activeTab)
 
     try {
+      console.log('🌐 Sending request to /api/admin/images')
       const response = await fetch('/api/admin/images', {
         method: 'POST',
         body: formData
       })
 
+      console.log('📡 Response status:', response.status)
       if (response.ok) {
+        console.log('✅ Upload successful!')
         await loadImages()
         setSelectedFile(null)
         setImagePreview(null)
         document.getElementById('fileInput').value = ''
       } else {
+        console.log('❌ Upload failed with status:', response.status)
         alert('Error uploading image')
       }
     } catch (error) {
-      console.error('Error uploading image:', error)
+      console.error('💥 Error uploading image:', error)
       alert('Error uploading image')
     }
     setUploading(false)
@@ -132,9 +149,9 @@ export default function Admin() {
     e.preventDefault()
     if (!draggedItem) return
 
-    const currentImages = activeTab === 'gallery' ? images : 
-                         activeTab === 'carousel' ? carouselImages : 
-                         manufacturingImages
+    const currentImages = activeTab === 'gallery' ? galleryImages : 
+                         activeTab === 'excellence' ? excellenceImages : 
+                         carosalImages
 
     const newImages = [...currentImages]
     const draggedIndex = newImages.findIndex(img => img.id === draggedItem.id)
@@ -157,9 +174,9 @@ export default function Admin() {
         })
         
         // Update local state
-        if (activeTab === 'gallery') setImages(newImages)
-        else if (activeTab === 'carousel') setCarouselImages(newImages)
-        else setManufacturingImages(newImages)
+        if (activeTab === 'gallery') setGalleryImages(newImages)
+        else if (activeTab === 'excellence') setExcellenceImages(newImages)
+        else setCarosalImages(newImages)
       } catch (error) {
         console.error('Error reordering images:', error)
       }
@@ -170,9 +187,9 @@ export default function Admin() {
 
   const getCurrentImages = () => {
     switch (activeTab) {
-      case 'carousel': return carouselImages
-      case 'manufacturing': return manufacturingImages
-      default: return images
+      case 'excellence': return excellenceImages
+      case 'carosal': return carosalImages
+      default: return galleryImages
     }
   }
 
@@ -230,19 +247,19 @@ export default function Admin() {
               className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
               onClick={() => setActiveTab('gallery')}
             >
-              Gallery Images
+              Gallery Images ({galleryImages.length})
             </button>
             <button 
-              className={`tab-btn ${activeTab === 'carousel' ? 'active' : ''}`}
-              onClick={() => setActiveTab('carousel')}
+              className={`tab-btn ${activeTab === 'excellence' ? 'active' : ''}`}
+              onClick={() => setActiveTab('excellence')}
             >
-              Carousel Images
+              Excellence Images ({excellenceImages.length})
             </button>
             <button 
-              className={`tab-btn ${activeTab === 'manufacturing' ? 'active' : ''}`}
-              onClick={() => setActiveTab('manufacturing')}
+              className={`tab-btn ${activeTab === 'carosal' ? 'active' : ''}`}
+              onClick={() => setActiveTab('carosal')}
             >
-              Manufacturing Excellence
+              Carosal Images ({carosalImages.length})
             </button>
             <button 
               className={`tab-btn ${activeTab === 'messages' ? 'active' : ''}`}
@@ -257,8 +274,8 @@ export default function Admin() {
             <div className="upload-section">
               <h2>
                 {activeTab === 'gallery' && 'Upload New Gallery Image'}
-                {activeTab === 'carousel' && 'Upload New Carousel Image'}
-                {activeTab === 'manufacturing' && 'Upload New Manufacturing Excellence Image'}
+                {activeTab === 'excellence' && 'Upload New Excellence Image'}
+                {activeTab === 'carosal' && 'Upload New Carosal Image'}
               </h2>
               <div className="upload-form">
                 <div className="file-input-wrapper">
@@ -284,9 +301,16 @@ export default function Admin() {
                   onClick={handleUpload}
                   disabled={!selectedFile || uploading}
                   className="upload-btn"
+                  style={{
+                    opacity: (!selectedFile || uploading) ? 0.5 : 1,
+                    cursor: (!selectedFile || uploading) ? 'not-allowed' : 'pointer'
+                  }}
                 >
                   {uploading ? 'Uploading...' : 'Upload Image'}
                 </button>
+                <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
+                  Debug: selectedFile={selectedFile ? 'Yes' : 'No'}, uploading={uploading ? 'Yes' : 'No'}
+                </div>
               </div>
             </div>
           )}

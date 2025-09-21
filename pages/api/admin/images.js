@@ -1,45 +1,51 @@
 import formidable from 'formidable'
 import fs from 'fs'
 import path from 'path'
-import { v2 as cloudinary } from 'cloudinary'
+import { supabaseAdmin } from '../../../lib/supabaseServer'
 
-// Configure Cloudinary if environment variables are available
-if (process.env.CLOUDINARY_CLOUD_NAME) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  })
+// Helper function to get file extension
+function getFileExtension(filename) {
+  return path.extname(filename || '').toLowerCase()
 }
 
-// For persistent storage, we'll use a JSON file + Cloudinary
-const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json')
-
-// Ensure data directory exists
-const dataDir = path.join(process.cwd(), 'data')
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true })
+// Helper function to generate unique filename
+function generateFilename(originalFilename) {
+  const timestamp = Date.now()
+  const ext = getFileExtension(originalFilename)
+  return `image_${timestamp}${ext}`
 }
 
-// Load images from file
-function loadImages() {
+// Load images from JSON file
+function loadImagesFromFile() {
   try {
-    if (fs.existsSync(IMAGES_FILE)) {
-      const data = fs.readFileSync(IMAGES_FILE, 'utf8')
-      return JSON.parse(data)
+    const filePath = path.join(process.cwd(), 'data', 'images.json')
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8')
+      const parsed = JSON.parse(data)
+      return parsed.images || []
     }
   } catch (error) {
-    console.error('Error loading images:', error)
+    console.error('Error loading images from file:', error)
   }
   return []
 }
 
-// Save images to file
-function saveImages(images) {
+// Save images to JSON file
+function saveImagesToFile(images) {
   try {
-    fs.writeFileSync(IMAGES_FILE, JSON.stringify(images, null, 2))
+    const dataDir = path.join(process.cwd(), 'data')
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true })
+    }
+    
+    const filePath = path.join(dataDir, 'images.json')
+    const data = {
+      images: images,
+      lastUpdated: new Date().toISOString()
+    }
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
   } catch (error) {
-    console.error('Error saving images:', error)
+    console.error('Error saving images to file:', error)
   }
 }
 
@@ -52,38 +58,90 @@ export const config = {
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
-    // Get images for specific page or all images
-    const { page } = req.query
-    const images = loadImages()
-    
-    if (page) {
-      const filteredImages = images.filter(img => img.page === page)
-      // Sort by order if available
-      filteredImages.sort((a, b) => (a.order || 0) - (b.order || 0))
+    try {
+      const { page, type } = req.query
+      
+      // Try database first if Supabase is configured
+      if (supabaseAdmin) {
+        try {
+        let query = supabaseAdmin
+          .from('images')
+          .select('*')
+          .order('created_at', { ascending: true })
+        
+        if (type) {
+          query = query.eq('type', type)
+        }
+          
+          const { data, error } = await query
+          
+          if (!error && data) {
+            return res.status(200).json(data)
+          }
+        } catch (dbError) {
+          console.log('Database query failed, falling back to JSON file:', dbError.message)
+        }
+      }
+
+      // Fallback to JSON file
+      const images = loadImagesFromFile()
+      let filteredImages = images
+      
+      if (page) {
+        filteredImages = filteredImages.filter(img => img.page === page)
+      }
+      
+      if (type) {
+        filteredImages = filteredImages.filter(img => img.type === type)
+      }
+      
+      // Sort by order_index
+      filteredImages.sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
+      
       res.status(200).json(filteredImages)
-    } else {
-      res.status(200).json(images)
+    } catch (error) {
+      console.error('Error in GET /api/admin/images:', error)
+      res.status(200).json([])
     }
   } 
   else if (req.method === 'POST') {
     // Upload new image
     try {
+      console.log('📤 Starting image upload...')
+      
       const form = formidable({
         keepExtensions: true,
         maxFileSize: 10 * 1024 * 1024, // 10MB limit
       })
 
       const [fields, files] = await form.parse(req)
+      console.log('📋 Parsed fields:', fields)
+      console.log('📁 Parsed files:', files)
+      
       const image = files.image?.[0]
-      const page = fields.page?.[0] || 'gallery'
+      const type = fields.type?.[0] || 'gallery'
+      
+      console.log('🖼️ Image:', image)
+      console.log('🏷️ Type:', type)
 
       if (!image) {
+        console.log('❌ No image provided')
         return res.status(400).json({ error: 'No image provided' })
       }
 
       // Generate unique ID
       const timestamp = Date.now()
       const filename = `image_${timestamp}`
+      
+      // Generate UUID for database
+      const generateUUID = () => {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0
+          const v = c === 'x' ? r : (r & 0x3 | 0x8)
+          return v.toString(16)
+        })
+      }
+      const uuid = generateUUID()
 
       let imageUrl, cloudinaryId = null
 
@@ -106,8 +164,12 @@ export default async function handler(req, res) {
 
       // Fallback to local storage if Cloudinary fails or not configured
       if (!imageUrl) {
+        console.log('📁 Using local storage...')
         const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+        console.log('📂 Uploads directory:', uploadsDir)
+        
         if (!fs.existsSync(uploadsDir)) {
+          console.log('📁 Creating uploads directory...')
           fs.mkdirSync(uploadsDir, { recursive: true })
         }
 
@@ -115,9 +177,20 @@ export default async function handler(req, res) {
         const localFilename = `${filename}${ext}`
         const newPath = path.join(uploadsDir, localFilename)
 
+        console.log('📄 Original filename:', image.originalFilename)
+        console.log('📄 Local filename:', localFilename)
+        console.log('📄 New path:', newPath)
+        console.log('📄 Source filepath:', image.filepath)
+
         // Move file to final location
-        fs.renameSync(image.filepath, newPath)
-        imageUrl = `/uploads/${localFilename}`
+        try {
+          fs.renameSync(image.filepath, newPath)
+          imageUrl = `/uploads/${localFilename}`
+          console.log('✅ File moved successfully to:', imageUrl)
+        } catch (moveError) {
+          console.error('❌ Error moving file:', moveError)
+          throw moveError
+        }
       }
 
       // Create image record
@@ -127,14 +200,43 @@ export default async function handler(req, res) {
         url: imageUrl,
         cloudinaryId,
         alt: `Uploaded image ${timestamp}`,
-        page,
+        type,
         uploadedAt: new Date().toISOString()
       }
 
-      // Save to images file
-      const images = loadImages()
+      console.log('💾 Created image record:', newImage)
+
+      // Try to save to database first
+      if (supabaseAdmin) {
+        try {
+          console.log('🗄️ Saving to database...')
+          const { error: dbError } = await supabaseAdmin
+            .from('images')
+            .insert([{
+              id: uuid,
+              type: type,
+              url: imageUrl,
+              created_at: new Date().toISOString()
+            }])
+          
+          if (dbError) {
+            console.error('❌ Database insert error:', dbError)
+            // Fall back to JSON file
+          } else {
+            console.log('✅ Successfully saved to database')
+            return res.status(200).json(newImage)
+          }
+        } catch (dbError) {
+          console.error('❌ Database connection error:', dbError)
+          // Fall back to JSON file
+        }
+      }
+
+      // Fallback: Save to JSON file
+      console.log('📄 Saving to JSON file as fallback...')
+      const images = loadImagesFromFile()
       images.push(newImage)
-      saveImages(images)
+      saveImagesToFile(images)
 
       res.status(200).json(newImage)
     } catch (error) {
@@ -151,7 +253,29 @@ export default async function handler(req, res) {
     }
 
     try {
-      const images = loadImages()
+      // Try to delete from database first
+      if (supabaseAdmin) {
+        try {
+          const { error: dbError } = await supabaseAdmin
+            .from('images')
+            .delete()
+            .eq('id', id)
+          
+          if (dbError) {
+            console.error('Database delete error:', dbError)
+            // Fall back to JSON file deletion
+          } else {
+            console.log('Successfully deleted from database')
+            return res.status(200).json({ success: true })
+          }
+        } catch (dbError) {
+          console.error('Database connection error:', dbError)
+          // Fall back to JSON file deletion
+        }
+      }
+
+      // Fallback: Delete from JSON file
+      const images = loadImagesFromFile()
       const imageIndex = images.findIndex(img => img.id == id)
       
       if (imageIndex === -1) {
@@ -180,7 +304,7 @@ export default async function handler(req, res) {
 
       // Remove from images array
       images.splice(imageIndex, 1)
-      saveImages(images)
+      saveImagesToFile(images)
 
       res.status(200).json({ success: true })
     } catch (error) {

@@ -139,9 +139,47 @@ html,body{margin:0;padding:0;font-family:'Inter', -apple-system, BlinkMacSystemF
   width:100%;
 }
 
+.admin-section{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-left:auto;
+}
+
 .admin-link{
   color:var(--accent2) !important;
   font-weight:600;
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:6px;
+  transition:all 0.2s ease;
+  border:1px solid var(--accent2);
+  background:transparent;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.admin-link:hover{
+  background:var(--accent2);
+  color:white !important;
+}
+
+.logout-link{
+  color:var(--muted) !important;
+  font-weight:500;
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:6px;
+  transition:all 0.2s ease;
+  border:1px solid var(--muted);
+  background:transparent;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.logout-link:hover{
+  background:var(--muted);
+  color:white !important;
 }
 
 .admin-link::after{

@@ -41,18 +41,26 @@ export default function Gallery() {
 
   const loadImages = async () => {
     try {
-      // Try to load from admin API first - specifically for gallery
-      const response = await fetch('/api/admin/images?page=gallery')
+      // Try to load from public API first - specifically for gallery
+      const response = await fetch('/api/images?type=gallery')
       if (response.ok) {
-        const adminImages = await response.json()
-        if (adminImages.length > 0) {
-          setImages(adminImages)
+        const apiImages = await response.json()
+        if (apiImages.length > 0) {
+          // Map the data to ensure proper structure
+          const mappedImages = apiImages.map((img, index) => ({
+            id: img.id || img.filename || `gallery-${index}`,
+            url: img.url,
+            alt: img.alt_text || img.alt || `Gallery Image ${index + 1}`,
+            filename: img.filename,
+            ...img
+          }))
+          setImages(mappedImages)
           setLoading(false)
           return
         }
       }
       
-      // Fallback to original images only if no admin images
+      // Fallback to original images only if no API images
       setImages(fallbackImages.map((url, index) => ({
         id: index,
         url,
@@ -98,7 +106,7 @@ export default function Gallery() {
                   >
                     <img 
                       src={image.url} 
-                      alt={image.alt || `Manufacturing Process ${index + 1}`}
+                      alt={image.alt_text || image.alt || `Manufacturing Process ${index + 1}`}
                       loading="lazy"
                     />
                     <div className="gallery-overlay">

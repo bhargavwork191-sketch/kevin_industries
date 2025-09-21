@@ -98,14 +98,6 @@ export default function Layout({ children }) {
             <Link href="/about" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
             <Link href="/gallery" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
             <Link href="/contact" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-            {isAuthenticated ? (
-              <>
-                <Link href="/admin" className="nav-link admin-link" onClick={() => setIsMobileMenuOpen(false)}>Admin Dashboard</Link>
-                <button className="nav-link logout-link" onClick={() => { logout(); setIsMobileMenuOpen(false); }}>Logout</button>
-              </>
-            ) : (
-              <button className="nav-link admin-link" onClick={() => { handleLoginClick(); setIsMobileMenuOpen(false); }}>Login as Admin</button>
-            )}
             <Link href="/gallery" className="cta-button" onClick={() => setIsMobileMenuOpen(false)}>
               <span>Explore Our Work</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -113,6 +105,18 @@ export default function Layout({ children }) {
               </svg>
             </Link>
           </nav>
+          
+          {/* Admin section in top right */}
+          <div className="admin-section">
+            {isAuthenticated ? (
+              <>
+                <Link href="/admin" className="admin-link" onClick={() => setIsMobileMenuOpen(false)}>Admin Dashboard</Link>
+                <button className="logout-link" onClick={() => { logout(); setIsMobileMenuOpen(false); }}>Logout</button>
+              </>
+            ) : (
+              <button className="admin-link" onClick={() => { handleLoginClick(); setIsMobileMenuOpen(false); }}>Login as Admin</button>
+            )}
+          </div>
           <div className={`mobile-menu-toggle ${isMobileMenuOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
             <span></span>
             <span></span>
