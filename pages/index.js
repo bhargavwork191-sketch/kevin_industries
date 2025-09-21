@@ -1,7 +1,7 @@
 
 import Layout from '../components/Layout'
 import Carousel from '../components/Carousel'
-import ExcellenceImages from '../components/ExcellenceImages'
+import ExcellenceImages from '../components/ExcellenceImages.js'
 
 export default function Home() {
   return (
