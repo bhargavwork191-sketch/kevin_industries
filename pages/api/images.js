@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '../../lib/supabaseServer.js'
+import { supabaseAdmin } from '../../lib/supabaseServer'
 import fs from 'fs'
 import path from 'path'
 
