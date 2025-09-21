@@ -24,6 +24,26 @@ body {
   width: 100%;
 }
 
+/* Ensure all elements fit within viewport */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile-first approach */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly buttons on mobile */
+@media (max-width: 767px) {
+  button, .cta-button, .nav-link, .admin-link, .logout-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 /* Professional Header */
 .header{
   background:rgba(255, 255, 255, 0.95);
@@ -219,6 +239,17 @@ body {
   cursor:pointer;
   padding:8px;
   z-index:1001;
+  background: rgba(0, 0, 0, 0.05);
+  min-width: 40px;
+  min-height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .mobile-menu-toggle span{
@@ -504,44 +535,58 @@ body {
   gap: 8px;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
+/* Responsive Design - Comprehensive Breakpoints */
+
+/* Large Laptops and Desktops (1400px+) */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+    padding: 0 32px;
+  }
+}
+
+/* Laptops and Small Desktops (1200px - 1399px) */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+/* Large Tablets and Small Laptops (992px - 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
   .container {
     padding: 0 20px;
   }
-}
-
-@media (max-width: 1024px) {
+  
   .nav-links {
-    gap: 24px;
+    gap: 20px;
   }
   
-  .footer-content {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+  .brand-title {
+    font-size: 20px;
   }
   
-  .mobile-menu-toggle {
-    display: flex;
-  }
-  
-  .nav-links:not(.mobile-open) {
-    display: none;
-  }
-  
-  .admin-section {
-    margin-left: auto;
-    margin-right: 16px;
+  .h1 {
+    font-size: 32px;
   }
 }
 
-@media (max-width: 768px) {
+/* Tablets (768px - 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
   .container {
     padding: 0 16px;
   }
   
-  .header {
-    padding: 12px 0;
+  .mobile-menu-toggle {
+    display: flex !important;
+  }
+  
+  .nav-links:not(.mobile-open) {
+    display: none !important;
+  }
+  
+  .nav-links.mobile-open {
+    display: flex !important;
   }
   
   .nav {
@@ -552,36 +597,135 @@ body {
     gap: 12px;
   }
   
-  .logo-mark {
-    width: 40px;
-    height: 40px;
-  }
-  
   .brand-title {
     font-size: 18px;
   }
   
+  .h1 {
+    font-size: 28px;
+  }
+  
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .hero-visual {
+    min-width: unset;
+    max-width: 100%;
+  }
+  
+  .hero-content {
+    min-width: unset;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .gallery-grid {
+    column-count: 2;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+/* Large Mobile Phones (576px - 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .header {
+    padding: 12px 0;
+  }
+  
+  .nav {
+    gap: 12px;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+  }
+  
+  .nav-links:not(.mobile-open) {
+    display: none !important;
+  }
+  
+  .nav-links.mobile-open {
+    display: flex !important;
+  }
+  
+  .brand {
+    gap: 10px;
+  }
+  
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .brand-title {
+    font-size: 16px;
+  }
+  
   .certification-badge {
-    font-size: 10px;
+    font-size: 9px;
   }
   
   .tagline {
-    font-size: 11px;
+    font-size: 10px;
+  }
+  
+  .h1 {
+    font-size: 24px;
+  }
+  
+  .lead {
+    font-size: 16px;
   }
   
   .cta-button {
-    padding: 10px 20px;
+    padding: 10px 18px;
     font-size: 13px;
   }
   
-  .admin-section {
-    margin-left: auto;
-    margin-right: 0;
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
   }
   
-  .admin-link, .logout-link {
-    font-size: 12px;
-    padding: 6px 12px;
+  .hero-visual {
+    min-width: unset;
+    max-width: 100%;
+  }
+  
+  .hero-content {
+    min-width: unset;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .gallery-grid {
+    column-count: 2;
+  }
+  
+  .process {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .proc-item {
+    min-width: 90px;
+    padding: 10px 12px;
   }
   
   .footer-content {
@@ -596,30 +740,41 @@ body {
     text-align: center;
   }
   
-  .hero-inner {
-    flex-direction: column;
+  .admin-section {
+    margin-left: auto;
+    margin-right: 0;
   }
   
-  .highlights {
-    flex-direction: column;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .gallery-grid {
-    grid-template-columns: 1fr 1fr;
+  .admin-link, .logout-link {
+    font-size: 11px;
+    padding: 5px 10px;
   }
 }
 
-@media (max-width: 480px) {
+/* Medium Mobile Phones (480px - 575px) */
+@media (max-width: 575px) and (min-width: 480px) {
   .container {
-    padding: 0 12px;
+    padding: 0 14px;
+  }
+  
+  .header {
+    padding: 10px 0;
   }
   
   .nav {
-    gap: 12px;
+    gap: 10px;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+  }
+  
+  .nav-links:not(.mobile-open) {
+    display: none !important;
+  }
+  
+  .nav-links.mobile-open {
+    display: flex !important;
   }
   
   .brand {
@@ -632,7 +787,23 @@ body {
   }
   
   .brand-title {
-    font-size: 16px;
+    font-size: 15px;
+  }
+  
+  .certification-badge {
+    font-size: 8px;
+  }
+  
+  .tagline {
+    font-size: 9px;
+  }
+  
+  .h1 {
+    font-size: 22px;
+  }
+  
+  .lead {
+    font-size: 15px;
   }
   
   .cta-button {
@@ -640,13 +811,55 @@ body {
     font-size: 12px;
   }
   
-  .gallery-grid {
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .hero-visual {
+    min-width: unset;
+    max-width: 100%;
+  }
+  
+  .hero-content {
+    min-width: unset;
+  }
+  
+  .grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .gallery-grid {
+    column-count: 1;
+  }
+  
+  .process {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .proc-item {
+    min-width: 80px;
+    padding: 8px 10px;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .footer-bottom-content {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
   }
   
   .nav-links.mobile-open {
-    left: 12px;
-    right: 12px;
+    left: 14px;
+    right: 14px;
     top: 70px;
     padding: 20px;
   }
@@ -657,8 +870,132 @@ body {
   }
   
   .admin-link, .logout-link {
-    font-size: 11px;
+    font-size: 10px;
     padding: 4px 8px;
+  }
+}
+
+/* Small Mobile Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .container {
+    padding: 0 12px;
+  }
+  
+  .header {
+    padding: 8px 0;
+  }
+  
+  .nav {
+    gap: 8px;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+  }
+  
+  .nav-links:not(.mobile-open) {
+    display: none !important;
+  }
+  
+  .nav-links.mobile-open {
+    display: flex !important;
+  }
+  
+  .brand {
+    gap: 6px;
+  }
+  
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .brand-title {
+    font-size: 14px;
+  }
+  
+  .certification-badge {
+    font-size: 7px;
+  }
+  
+  .tagline {
+    font-size: 8px;
+  }
+  
+  .h1 {
+    font-size: 20px;
+  }
+  
+  .lead {
+    font-size: 14px;
+  }
+  
+  .cta-button {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+  
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .hero-visual {
+    min-width: unset;
+    max-width: 100%;
+  }
+  
+  .hero-content {
+    min-width: unset;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .gallery-grid {
+    column-count: 1;
+  }
+  
+  .process {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .proc-item {
+    min-width: 70px;
+    padding: 6px 8px;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .footer-bottom-content {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .nav-links.mobile-open {
+    left: 12px;
+    right: 12px;
+    top: 60px;
+    padding: 16px;
+  }
+  
+  .admin-section {
+    margin-left: auto;
+    margin-right: 0;
+  }
+  
+  .admin-link, .logout-link {
+    font-size: 9px;
+    padding: 3px 6px;
   }
 }
 
