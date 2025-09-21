@@ -8,7 +8,8 @@
     "start": "next start -p 3000",
     "backup": "node scripts/backup-images.js",
     "restore": "node scripts/restore-images.js",
-    "migrate-cloudinary": "node scripts/migrate-to-cloudinary.js"
+    "migrate-cloudinary": "node scripts/migrate-to-cloudinary.js",
+    "setup-cloudinary": "node scripts/setup-cloudinary.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.0",

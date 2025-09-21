@@ -164,6 +164,13 @@ export default async function handler(req, res) {
 
       // Fallback to local storage if Cloudinary fails or not configured
       if (!imageUrl) {
+        // In production (Vercel), require Cloudinary
+        if (process.env.VERCEL) {
+          return res.status(500).json({ 
+            error: 'Cloudinary is required for production uploads. Please configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET environment variables.' 
+          })
+        }
+        
         console.log('📁 Using local storage...')
         const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
         console.log('📂 Uploads directory:', uploadsDir)
