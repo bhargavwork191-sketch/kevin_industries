@@ -536,13 +536,43 @@ img {
   gap: 8px;
 }
 
-/* Responsive Design - Simplified Breakpoints */
+/* Responsive Design */
 
-/* Mobile Menu - Show on tablets and below */
-@media (max-width: 991px) {
+/* Large screens - Desktop */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+    padding: 0 24px;
+  }
+}
+
+/* Medium screens - Laptops */
+@media (max-width: 1199px) and (min-width: 769px) {
+  .container {
+    padding: 0 20px;
+  }
+  
+  .nav-links {
+    gap: 20px;
+  }
+  
+  .brand-title {
+    font-size: 20px;
+  }
+  
+  .h1 {
+    font-size: 32px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) and (min-width: 481px) {
+  .container {
+    padding: 0 16px;
+  }
+  
   .mobile-menu-toggle {
     display: flex !important;
-    background: red !important; /* Debug: Make it visible */
   }
   
   .nav-links:not(.mobile-open) {
@@ -551,13 +581,6 @@ img {
   
   .nav-links.mobile-open {
     display: flex !important;
-  }
-}
-
-/* Tablets and below */
-@media (max-width: 991px) {
-  .container {
-    padding: 0 16px;
   }
   
   .nav {
@@ -606,112 +629,7 @@ img {
 }
 
 /* Mobile phones */
-@media (max-width: 767px) {
-  .container {
-    padding: 0 16px;
-  }
-  
-  .header {
-    padding: 12px 0;
-  }
-  
-  .nav {
-    gap: 12px;
-  }
-  
-  .brand {
-    gap: 10px;
-  }
-  
-  .logo-mark {
-    width: 38px;
-    height: 38px;
-  }
-  
-  .brand-title {
-    font-size: 16px;
-  }
-  
-  .certification-badge {
-    font-size: 9px;
-  }
-  
-  .tagline {
-    font-size: 10px;
-  }
-  
-  .h1 {
-    font-size: 24px;
-  }
-  
-  .lead {
-    font-size: 16px;
-  }
-  
-  .cta-button {
-    padding: 10px 18px;
-    font-size: 13px;
-  }
-  
-  .hero-inner {
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-  }
-  
-  .hero-visual {
-    min-width: unset;
-    max-width: 100%;
-  }
-  
-  .hero-content {
-    min-width: unset;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .gallery-grid {
-    column-count: 2;
-  }
-  
-  .process {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .proc-item {
-    min-width: 90px;
-    padding: 10px 12px;
-  }
-  
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    text-align: center;
-  }
-  
-  .footer-bottom-content {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-  }
-  
-  .admin-section {
-    margin-left: auto;
-    margin-right: 0;
-  }
-  
-  .admin-link, .logout-link {
-    font-size: 11px;
-    padding: 5px 10px;
-  }
-}
-
-/* Small mobile phones */
-@media (max-width: 479px) {
+@media (max-width: 480px) {
   .container {
     padding: 0 12px;
   }
@@ -722,6 +640,18 @@ img {
   
   .nav {
     gap: 8px;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex !important;
+  }
+  
+  .nav-links:not(.mobile-open) {
+    display: none !important;
+  }
+  
+  .nav-links.mobile-open {
+    display: flex !important;
   }
   
   .brand {
