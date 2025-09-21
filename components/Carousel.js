@@ -141,7 +141,7 @@ export default function Carousel({ page = 'carousel' }) {
               width: '100%', 
               height: '100%', 
               borderRadius: 12,
-              objectFit: 'cover'
+              objectFit: 'contain'
             }}
             loading="lazy"
           />

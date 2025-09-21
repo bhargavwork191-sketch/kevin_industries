@@ -2,22 +2,36 @@ import formidable from 'formidable'
 import fs from 'fs'
 import path from 'path'
 
-// For Vercel compatibility, we'll use a different approach
-// Store images data in memory or use external storage
-let imagesData = []
+// For persistent storage, we'll use a JSON file
+// This will work on Vercel as long as we don't exceed the function timeout
+const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json')
 
-// In production, you should use a proper database like Supabase, MongoDB, etc.
-// For now, we'll use a simple in-memory store that resets on each deployment
-// This is NOT suitable for production - use a real database!
-
-// Load images from memory (resets on each deployment)
-function loadImages() {
-  return imagesData || []
+// Ensure data directory exists
+const dataDir = path.join(process.cwd(), 'data')
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true })
 }
 
-// Save images to memory
+// Load images from file
+function loadImages() {
+  try {
+    if (fs.existsSync(IMAGES_FILE)) {
+      const data = fs.readFileSync(IMAGES_FILE, 'utf8')
+      return JSON.parse(data)
+    }
+  } catch (error) {
+    console.error('Error loading images:', error)
+  }
+  return []
+}
+
+// Save images to file
 function saveImages(images) {
-  imagesData = images
+  try {
+    fs.writeFileSync(IMAGES_FILE, JSON.stringify(images, null, 2))
+  } catch (error) {
+    console.error('Error saving images:', error)
+  }
 }
 
 // Configure API to not parse body
@@ -46,10 +60,16 @@ export default async function handler(req, res) {
     // Upload new image
     try {
       const form = formidable({
-        // Don't save to filesystem in Vercel
+        uploadDir: path.join(process.cwd(), 'public', 'uploads'),
         keepExtensions: true,
         maxFileSize: 10 * 1024 * 1024, // 10MB limit
       })
+
+      // Ensure uploads directory exists
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true })
+      }
 
       const [fields, files] = await form.parse(req)
       const image = files.image?.[0]
@@ -59,26 +79,26 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'No image provided' })
       }
 
-      // Read the file content
-      const fileContent = fs.readFileSync(image.filepath)
-      const base64Content = fileContent.toString('base64')
-      
       // Generate unique filename
       const timestamp = Date.now()
       const ext = path.extname(image.originalFilename || '')
       const filename = `image_${timestamp}${ext}`
+      const newPath = path.join(uploadsDir, filename)
 
-      // Create image record with base64 data
+      // Move file to final location
+      fs.renameSync(image.filepath, newPath)
+
+      // Create image record
       const newImage = {
         id: timestamp,
         filename,
-        url: `data:image/${ext.slice(1)};base64,${base64Content}`,
+        url: `/uploads/${filename}`,
         alt: `Uploaded image ${timestamp}`,
         page,
         uploadedAt: new Date().toISOString()
       }
 
-      // Save to memory
+      // Save to images file
       const images = loadImages()
       images.push(newImage)
       saveImages(images)
@@ -105,7 +125,15 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'Image not found' })
       }
 
-      // Remove from images array (no file to delete since we're using base64)
+      const image = images[imageIndex]
+      
+      // Delete file from filesystem
+      const filePath = path.join(process.cwd(), 'public', image.url)
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath)
+      }
+
+      // Remove from images array
       images.splice(imageIndex, 1)
       saveImages(images)
 

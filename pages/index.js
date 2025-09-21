@@ -528,7 +528,7 @@ export default function Home() {
         .carousel-container {
           position: relative;
           width: 100%;
-          height: 400px;
+          height: 500px;
           border-radius: 20px;
           overflow: hidden;
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -545,7 +545,7 @@ export default function Home() {
         .carousel-image {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           transition: transform 0.5s ease;
         }
 
@@ -935,7 +935,7 @@ export default function Home() {
 
           .carousel-container {
             width: 100%;
-            height: 350px;
+            height: 400px;
             max-width: 600px;
           }
         }
@@ -972,7 +972,7 @@ export default function Home() {
 
           .carousel-container {
             width: 100%;
-            height: 300px;
+            height: 350px;
             max-width: 500px;
           }
 
@@ -1002,7 +1002,7 @@ export default function Home() {
 
           .carousel-container {
             width: 100%;
-            height: 250px;
+            height: 300px;
             max-width: 400px;
           }
 
