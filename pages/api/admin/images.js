@@ -1,7 +1,7 @@
 import formidable from 'formidable'
 import fs from 'fs'
 import path from 'path'
-import { supabaseAdmin } from '../../../lib/supabaseServer'
+import { supabaseAdmin } from '../../../lib/supabaseServer.js'
 
 // Helper function to get file extension
 function getFileExtension(filename) {
