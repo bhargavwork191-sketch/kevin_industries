@@ -73,6 +73,7 @@ export default function Contact() {
                     <div className="contact-content">
                       <h4>Email</h4>
                       <p>info@kevinindustries.in</p>
+                      <p>kevindiecast@gmail.com</p>
                     </div>
                   </div>
 
@@ -110,6 +111,7 @@ export default function Contact() {
                       </div>
                       <h4>Thank you!</h4>
                       <p>We received your message and will get back to you soon.</p>
+                      <p className="email-note">Your message has been sent to both info@kevinindustries.in and kevindiecast@gmail.com</p>
                     </div>
                   ) : (
                     <form className="contact-form" onSubmit={submit}>
@@ -378,6 +380,17 @@ export default function Contact() {
           font-size: 16px;
           color: var(--muted);
           margin: 0;
+        }
+
+        .email-note {
+          font-size: 14px !important;
+          color: var(--accent) !important;
+          font-weight: 500;
+          margin-top: 12px !important;
+          background: #f0f9ff;
+          padding: 8px 12px;
+          border-radius: 6px;
+          border: 1px solid #e0f2fe;
         }
 
         .map-section {

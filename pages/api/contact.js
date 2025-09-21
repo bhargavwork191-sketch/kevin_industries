@@ -43,6 +43,11 @@ Timestamp: ${new Date().toLocaleString()}
 
       // Log the email content (in production, send actual email)
       console.log('Email to info@kevinindustries.in:', emailContent)
+      console.log('Email to kevindiecast@gmail.com:', emailContent)
+      
+      // If you want to use environment variables for email addresses
+      const adminEmail2 = process.env.ADMIN_EMAIL_2 || 'kevindiecast@gmail.com'
+      console.log(`Email to ${adminEmail2}:`, emailContent)
 
       res.status(200).json({ 
         message: 'Message sent successfully',
