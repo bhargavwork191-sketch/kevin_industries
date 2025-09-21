@@ -1,0 +1,15 @@
+<svg width="500" height="90" viewBox="0 0 500 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Company Name (larger text) -->
+  <text x="20" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#0ea5e9">KEVIN INDUSTRIES</text>
+  
+  <!-- Three Blue Lines beside the text (thinner, more space, longer) -->
+  <rect x="320" y="20" width="80" height="2" fill="#0ea5e9"/>
+  <rect x="320" y="32" width="80" height="2" fill="#0ea5e9"/>
+  <rect x="320" y="44" width="80" height="2" fill="#0ea5e9"/>
+  
+  <!-- Green Line extending to the end of blue lines (thinner, longer) -->
+  <rect x="20" y="52" width="380" height="3" fill="#10b981"/>
+  
+  <!-- Certification Text (larger font) -->
+  <text x="20" y="75" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#0f172a">AN ISO 9001 : 2015 CERTIFIED COMPANY</text>
+</svg>

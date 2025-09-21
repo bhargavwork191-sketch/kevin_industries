@@ -1,0 +1,12 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600'>
+<rect width='100%' height='100%' fill='#eef6ff'/>
+<g transform='translate(80,80)'>
+<rect x='0' y='40' rx='14' ry='14' width='980' height='420' fill='#fff'/>
+<g transform='translate(36,56)'>
+<rect width='420' height='320' rx='10' fill='#f3f7fb'/>
+<rect x='440' y='0' width='460' height='320' rx='10' fill='#e8f1ff'/>
+</g>
+<text x='80' y='380' fill='#0b2545' font-size='28' font-weight='700'>Illustration: Casting & Machining Line</text>
+<text x='80' y='420' fill='#6b7280' font-size='14'>Placeholder illustration — replace with HD casting/machinery asset</text>
+</g>
+</svg>
