@@ -17,6 +17,8 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('gallery')
   const [draggedItem, setDraggedItem] = useState(null)
   const [selectedMessage, setSelectedMessage] = useState(null)
+  const [touchStartX, setTouchStartX] = useState(0)
+  const [touchEndX, setTouchEndX] = useState(0)
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -31,6 +33,46 @@ export default function Admin() {
       loadImages()
     }
   }, [isAuthenticated])
+
+  // Refresh image counts when switching tabs
+  useEffect(() => {
+    if (isAuthenticated && activeTab) {
+      refreshImageCounts()
+    }
+  }, [activeTab, isAuthenticated])
+
+  // Touch gesture handlers for mobile tab navigation
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return
+    
+    const distance = touchStartX - touchEndX
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      // Swipe left - go to next tab
+      const tabs = ['gallery', 'excellence', 'carosal', 'messages']
+      const currentIndex = tabs.indexOf(activeTab)
+      if (currentIndex < tabs.length - 1) {
+        setActiveTab(tabs[currentIndex + 1])
+      }
+    } else if (isRightSwipe) {
+      // Swipe right - go to previous tab
+      const tabs = ['gallery', 'excellence', 'carosal', 'messages']
+      const currentIndex = tabs.indexOf(activeTab)
+      if (currentIndex > 0) {
+        setActiveTab(tabs[currentIndex - 1])
+      }
+    }
+  }
 
   const loadImages = async () => {
     setLoading(true)
@@ -135,6 +177,15 @@ export default function Admin() {
     }
   }
 
+  // Function to refresh image counts when switching tabs
+  const refreshImageCounts = async () => {
+    try {
+      await loadImages()
+    } catch (error) {
+      console.error('Error refreshing image counts:', error)
+    }
+  }
+
   const handleDragStart = (e, item) => {
     setDraggedItem(item)
     e.dataTransfer.effectAllowed = 'move'
@@ -234,39 +285,152 @@ export default function Admin() {
         <div className="admin-container">
           <div className="admin-header">
             <div className="header-content">
-              <div>
+              <div className="header-main">
                 <h1>Admin Dashboard</h1>
                 <p>Manage images and view contact messages</p>
+              </div>
+              <div className="header-stats">
+                <div className="stat-card">
+                  <div className="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <polyline points="21,15 16,10 5,21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-number">{galleryImages.length}</span>
+                    <span className="stat-label">Gallery</span>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-number">{excellenceImages.length}</span>
+                    <span className="stat-label">Excellence</span>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-number">{carosalImages.length}</span>
+                    <span className="stat-label">Carousel</span>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04004 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.89391 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5261 15.5775C21.8428 15.9518 22.0122 16.4296 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="stat-content">
+                    <span className="stat-number">{contactMessages.length}</span>
+                    <span className="stat-label">Messages</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Tab Navigation */}
-          <div className="tab-navigation">
-            <button 
-              className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
-              onClick={() => setActiveTab('gallery')}
-            >
-              Gallery Images ({galleryImages.length})
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'excellence' ? 'active' : ''}`}
-              onClick={() => setActiveTab('excellence')}
-            >
-              Excellence Images ({excellenceImages.length})
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'carosal' ? 'active' : ''}`}
-              onClick={() => setActiveTab('carosal')}
-            >
-              Carosal Images ({carosalImages.length})
-            </button>
-            <button 
-              className={`tab-btn ${activeTab === 'messages' ? 'active' : ''}`}
-              onClick={() => setActiveTab('messages')}
-            >
-              Contact Messages ({contactMessages.length})
-            </button>
+          {/* Professional Section Navigation */}
+          <div className="section-navigation">
+            <div className="section-cards">
+              <div 
+                className={`section-card ${activeTab === 'gallery' ? 'active' : ''}`}
+                onClick={() => setActiveTab('gallery')}
+              >
+                <div className="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="21,15 16,10 5,21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div className="section-content">
+                  <h3>Gallery Images</h3>
+                  <p>{galleryImages.length} images</p>
+                </div>
+                <div className="section-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div 
+                className={`section-card ${activeTab === 'excellence' ? 'active' : ''}`}
+                onClick={() => setActiveTab('excellence')}
+              >
+                <div className="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div className="section-content">
+                  <h3>Excellence Images</h3>
+                  <p>{excellenceImages.length} images</p>
+                </div>
+                <div className="section-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div 
+                className={`section-card ${activeTab === 'carosal' ? 'active' : ''}`}
+                onClick={() => setActiveTab('carosal')}
+              >
+                <div className="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div className="section-content">
+                  <h3>Carousel Images</h3>
+                  <p>{carosalImages.length} images</p>
+                </div>
+                <div className="section-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div 
+                className={`section-card ${activeTab === 'messages' ? 'active' : ''}`}
+                onClick={() => setActiveTab('messages')}
+              >
+                <div className="section-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04004 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.89391 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5261 15.5775C21.8428 15.9518 22.0122 16.4296 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div className="section-content">
+                  <h3>Contact Messages</h3>
+                  <p>{contactMessages.length} messages</p>
+                </div>
+                <div className="section-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Upload Section - Only for Image Tabs */}
@@ -340,8 +504,11 @@ export default function Admin() {
                         <button
                           onClick={() => handleDelete(image.id || index)}
                           className="delete-btn"
+                          title="Delete image"
                         >
-                          Delete
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
                         </button>
                       </div>
                     </div>
@@ -552,6 +719,149 @@ export default function Admin() {
           margin: 0;
         }
 
+        /* Professional Section Navigation */
+        .section-navigation {
+          margin-bottom: 40px;
+        }
+
+        .section-cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+        }
+
+        .section-card {
+          background: white;
+          border: 2px solid #e2e8f0;
+          border-radius: 16px;
+          padding: 24px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .section-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+          border-color: #0ea5e9;
+        }
+
+        .section-card.active {
+          background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+          color: white;
+          border-color: #0ea5e9;
+          box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+        }
+
+        .section-card.active .section-icon {
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+        }
+
+        .section-card.active .section-content h3,
+        .section-card.active .section-content p {
+          color: white;
+        }
+
+        .section-card.active .section-arrow {
+          color: white;
+        }
+
+        .section-icon {
+          width: 48px;
+          height: 48px;
+          background: #f1f5f9;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #0ea5e9;
+          flex-shrink: 0;
+        }
+
+        .section-content {
+          flex: 1;
+        }
+
+        .section-content h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 0 0 4px 0;
+          color: #1e293b;
+        }
+
+        .section-content p {
+          font-size: 0.875rem;
+          color: #64748b;
+          margin: 0;
+        }
+
+        .section-arrow {
+          color: #94a3b8;
+          transition: transform 0.3s ease;
+        }
+
+        .section-card:hover .section-arrow {
+          transform: translateX(4px);
+        }
+
+        /* Header Stats */
+        .header-stats {
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+
+        .stat-card {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          background: white;
+          padding: 16px 20px;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+          border: 1px solid #e2e8f0;
+          transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+        }
+
+        .stat-content {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .stat-number {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1e293b;
+          line-height: 1;
+        }
+
+        .stat-label {
+          font-size: 0.875rem;
+          color: #64748b;
+          font-weight: 500;
+        }
+
         /* Tab Navigation */
         .tab-navigation {
           display: flex;
@@ -759,20 +1069,26 @@ export default function Admin() {
         }
 
         .delete-btn {
-          padding: 6px 12px;
+          padding: 8px;
           background: #ef4444;
           color: white;
           border: none;
-          border-radius: 6px;
+          border-radius: 8px;
           font-size: 12px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 32px;
+          min-height: 32px;
         }
 
         .delete-btn:hover {
           background: #dc2626;
           transform: scale(1.05);
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         /* Messages Section Styles */
@@ -1028,6 +1344,31 @@ export default function Admin() {
         @media (max-width: 768px) {
           .admin-container {
             padding: 20px 16px;
+          }
+
+          .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+          }
+
+          .header-stats {
+            width: 100%;
+            justify-content: space-between;
+          }
+
+          .stat-card {
+            flex: 1;
+            min-width: 0;
+          }
+
+          .section-cards {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .section-card {
+            padding: 20px;
           }
 
           .upload-section,
