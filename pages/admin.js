@@ -186,6 +186,59 @@ export default function Admin() {
     }
   }
 
+  const updateMessageStatus = async (messageId, status) => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: messageId, status }),
+      })
+
+      if (response.ok) {
+        // Update the message in the local state
+        setContactMessages(prev => 
+          prev.map(msg => 
+            msg.id === messageId ? { ...msg, status } : msg
+          )
+        )
+        console.log('Message status updated successfully')
+      } else {
+        console.error('Failed to update message status')
+      }
+    } catch (error) {
+      console.error('Error updating message status:', error)
+    }
+  }
+
+  const deleteMessage = async (messageId) => {
+    if (!confirm('Are you sure you want to delete this message?')) {
+      return
+    }
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: messageId }),
+      })
+
+      if (response.ok) {
+        // Remove the message from the local state
+        setContactMessages(prev => prev.filter(msg => msg.id !== messageId))
+        setSelectedMessage(null)
+        console.log('Message deleted successfully')
+      } else {
+        console.error('Failed to delete message')
+      }
+    } catch (error) {
+      console.error('Error deleting message:', error)
+    }
+  }
+
   const handleDragStart = (e, item) => {
     setDraggedItem(item)
     e.dataTransfer.effectAllowed = 'move'
@@ -548,7 +601,7 @@ export default function Admin() {
                         </div>
                         <div className="message-meta">
                           <span className="message-time">
-                            {new Date(message.timestamp).toLocaleDateString()}
+                            {new Date(message.created_at).toLocaleDateString()}
                           </span>
                           {!message.read && <span className="unread-badge">New</span>}
                         </div>
@@ -556,9 +609,9 @@ export default function Admin() {
                       <div className="message-preview">
                         <p>{message.message.substring(0, 100)}...</p>
                       </div>
-                      {message.phone && (
+                      {message.mobile && (
                         <div className="message-phone">
-                          <strong>Phone:</strong> {message.phone}
+                          <strong>Phone:</strong> {message.mobile}
                         </div>
                       )}
                     </div>
@@ -594,16 +647,39 @@ export default function Admin() {
                     <div className="sender-details">
                       <h4>{selectedMessage.name}</h4>
                       <p>{selectedMessage.email}</p>
-                      {selectedMessage.phone && <p>Phone: {selectedMessage.phone}</p>}
+                      {selectedMessage.mobile && <p>Phone: {selectedMessage.mobile}</p>}
                     </div>
                   </div>
                   <div className="message-timestamp">
-                    {new Date(selectedMessage.timestamp).toLocaleString()}
+                    {new Date(selectedMessage.created_at).toLocaleString()}
                   </div>
                 </div>
                 <div className="message-content">
                   <h5>Message:</h5>
                   <p>{selectedMessage.message}</p>
+                </div>
+                <div className="message-actions">
+                  <div className="status-actions">
+                    <label>Status:</label>
+                    <select 
+                      value={selectedMessage.status} 
+                      onChange={(e) => updateMessageStatus(selectedMessage.id, e.target.value)}
+                      className="status-select"
+                    >
+                      <option value="new">New</option>
+                      <option value="read">Read</option>
+                      <option value="replied">Replied</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
+                  <div className="action-buttons">
+                    <button 
+                      className="delete-btn"
+                      onClick={() => deleteMessage(selectedMessage.id)}
+                    >
+                      Delete Message
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1339,6 +1415,72 @@ export default function Admin() {
           line-height: 1.6;
           margin: 0;
           white-space: pre-wrap;
+        }
+
+        .message-actions {
+          margin-top: 24px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(15, 23, 42, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .status-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .status-actions label {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--nav);
+        }
+
+        .status-select {
+          padding: 8px 12px;
+          border: 1px solid rgba(15, 23, 42, 0.2);
+          border-radius: 8px;
+          font-size: 14px;
+          background: white;
+          color: var(--nav);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .status-select:focus {
+          outline: none;
+          border-color: var(--accent);
+          box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .action-buttons {
+          display: flex;
+          gap: 12px;
+        }
+
+        .delete-btn {
+          background: #ef4444;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+          background: #dc2626;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .delete-btn:active {
+          transform: translateY(0);
         }
 
         @media (max-width: 768px) {
