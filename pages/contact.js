@@ -39,8 +39,8 @@ export default function Contact() {
                     <div className="stat-label">Years Experience</div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-number">24/7</div>
-                    <div className="stat-label">Support</div>
+                    <div className="stat-number">60+</div>
+                    <div className="stat-label">Years Experience</div>
                   </div>
                   <div className="stat-item">
                     <div className="stat-number">100%</div>
@@ -216,11 +216,11 @@ export default function Contact() {
             <div className="container">
               <div className="section-header">
                 <h2>Find Us</h2>
-                <p className="section-subtitle">Visit our manufacturing facility in Rajkot, Gujarat</p>
+                <p className="section-subtitle">Visit our manufacturing facility in Rajkot, Gujarat near Aji River</p>
               </div>
               <div className="map-container">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.123456789!2d70.123456789!3d22.123456789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDA3JzI0LjQiTiA3MMKwMDcnMjQuNCJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.5!2d70.8!3d22.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c9b8b8b8b8b8%3A0x1234567890abcdef!2sAji%20River%2C%20Rajkot%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1695123456789!5m2!1sen!2sin"
                   width="100%"
                   height="400"
                   style={{ border: 0, borderRadius: '16px' }}

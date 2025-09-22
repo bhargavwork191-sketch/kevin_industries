@@ -9,7 +9,7 @@ export default function Processes() {
       id: 'tool-room',
       title: 'Tool Room',
       description: 'Design, Make Die sets, maintenance of dies, develop tools, jigs and fixtures for different applications',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img6.jpeg',
       icon: '🔧',
       sequence: 1
     },
@@ -17,7 +17,7 @@ export default function Processes() {
       id: 'foundry-casting',
       title: 'Foundry/Casting',
       description: 'Pressure Die castings and initial casting operations',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img8.jpeg',
       icon: '🏭',
       sequence: 2
     },
@@ -25,7 +25,7 @@ export default function Processes() {
       id: 'machine-shop',
       title: 'Machine Shop',
       description: 'Machining of components as per drawing or samples',
-      image: 'https://images.unsplash.com/photo-1565812216238-4b3b73b0b8b8?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img1.jpg',
       icon: '⚙️',
       sequence: 3
     }
@@ -36,7 +36,7 @@ export default function Processes() {
       id: 'die-design',
       title: 'Die Design/Develop Die Set',
       description: 'Creating precise die designs and developing complete die sets for production',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img6.jpeg',
       position: 'start',
       sequence: 1
     },
@@ -44,7 +44,7 @@ export default function Processes() {
       id: 'pressure-die-casting',
       title: 'Pressure Die Casting & Heat Treatment',
       description: 'High-pressure metal casting process with integrated heat treatment for optimal material properties and precision components',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img5.jpg',
       position: 'main',
       sequence: 2
     },
@@ -52,7 +52,7 @@ export default function Processes() {
       id: 'machining',
       title: 'Machining',
       description: 'Precision machining of cast components to exact specifications',
-      image: 'https://images.unsplash.com/photo-1565812216238-4b3b73b0b8b8?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img13.jpeg',
       position: 'main',
       sequence: 3
     },
@@ -60,7 +60,7 @@ export default function Processes() {
       id: 'multi-tooling',
       title: 'Multi Tooling/Multi Spindle Machines',
       description: 'Advanced multi-tooling operations for complex component manufacturing',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img18.jpg',
       position: 'main',
       sequence: 4
     },
@@ -68,7 +68,7 @@ export default function Processes() {
       id: 'inspection-testing',
       title: 'Inspection / Testing',
       description: 'Comprehensive quality control and testing of finished components',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img 11.jpeg',
       position: 'main',
       sequence: 5
     },
@@ -76,7 +76,7 @@ export default function Processes() {
       id: 'packaging',
       title: 'Packaging',
       description: 'Secure packaging of finished components for safe transportation',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/j_img19.jpg',
       position: 'end',
       sequence: 6
     },
@@ -84,7 +84,7 @@ export default function Processes() {
       id: 'dispatch',
       title: 'Dispatch',
       description: 'Final dispatch of packaged components to customers',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop&crop=center',
+      image: '/web_images/k_img20.jpg',
       position: 'end',
       sequence: 7
     }
@@ -176,8 +176,15 @@ export default function Processes() {
                           {step.title.includes('Machining') && (
                             <>
                               <span className="feature-badge">CNC Machining</span>
-                              <span className="feature-badge">Multi-Tooling</span>
+                              <span className="feature-badge">Precision Tools</span>
                               <span className="feature-badge">Precision Finishing</span>
+                            </>
+                          )}
+                          {step.title.includes('Multi Tooling') && (
+                            <>
+                              <span className="feature-badge">Multi-Spindle Operations</span>
+                              <span className="feature-badge">Simultaneous Machining</span>
+                              <span className="feature-badge">Complex Components</span>
                             </>
                           )}
                           {step.title.includes('Inspection') && (
@@ -236,13 +243,6 @@ export default function Processes() {
                   <div className="metric-content">
                     <div className="metric-number">100%</div>
                     <div className="metric-label">Quality Control</div>
-                  </div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-icon">🏭</div>
-                  <div className="metric-content">
-                    <div className="metric-number">24/7</div>
-                    <div className="metric-label">Production</div>
                   </div>
                 </div>
                 <div className="metric-card">
@@ -478,8 +478,9 @@ export default function Processes() {
 
           .timeline-number {
             position: absolute;
-            top: -12px;
-            right: -12px;
+            top: 50%;
+            right: -20px;
+            transform: translateY(-50%);
             width: 40px;
             height: 40px;
             background: linear-gradient(135deg, #0ea5e9, #3b82f6);
@@ -515,6 +516,15 @@ export default function Processes() {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            margin-top: 16px;
+          }
+
+          .timeline-item.left .timeline-features {
+            justify-content: flex-start;
+          }
+
+          .timeline-item.right .timeline-features {
+            justify-content: flex-end;
           }
 
           .feature-badge {
@@ -634,6 +644,17 @@ export default function Processes() {
               height: 120px;
             }
 
+            .timeline-number {
+              top: -12px;
+              right: -12px;
+              transform: none;
+            }
+
+            .timeline-features {
+              margin-top: 12px;
+              justify-content: center;
+            }
+
             .timeline-connector {
               left: 20px;
             }
@@ -652,6 +673,25 @@ export default function Processes() {
             .timeline-image img {
               width: 120px;
               height: 100px;
+            }
+
+            .timeline-number {
+              top: -12px;
+              right: -12px;
+              transform: none;
+              width: 32px;
+              height: 32px;
+              font-size: 1rem;
+            }
+
+            .timeline-features {
+              margin-top: 8px;
+              justify-content: center;
+            }
+
+            .feature-badge {
+              font-size: 0.75rem;
+              padding: 4px 8px;
             }
           }
         `}</style>

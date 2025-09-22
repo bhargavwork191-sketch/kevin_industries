@@ -65,7 +65,7 @@ export default function About() {
                   </div>
                 </div>
                 <div className="overview-image">
-                  <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&h=400&fit=crop&crop=center" alt="Manufacturing Excellence" />
+                  <img src="/web_images/k_img4.jpeg" alt="Manufacturing Excellence" />
                 </div>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function About() {
                   </div>
                 </div>
                 <div className="quality-image">
-                  <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=500&h=400&fit=crop&crop=center" alt="Quality Control" />
+                  <img src="/web_images/k_img5.jpeg" alt="Quality Control" />
                 </div>
               </div>
             </div>

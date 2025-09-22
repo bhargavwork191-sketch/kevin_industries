@@ -51,7 +51,7 @@ export default function Home() {
               <div className="capabilities-showcase">
                 <div className="capability-card tool-room">
                   <div className="card-background">
-                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&h=400&fit=crop&crop=center" alt="Tool Room" />
+                    <img src="/web_images/k_img7.jpeg" alt="Tool Room" />
                     <div className="card-overlay"></div>
                   </div>
                   <div className="card-content">
@@ -81,7 +81,7 @@ export default function Home() {
 
                 <div className="capability-card foundry">
                   <div className="card-background">
-                    <img src="https://images.unsplash.com/photo-1565812216238-4b3b73b0b8b8?w=600&h=400&fit=crop&crop=center" alt="Foundry" />
+                    <img src="/web_images/k_img8.jpeg" alt="Foundry" />
                     <div className="card-overlay"></div>
                   </div>
                   <div className="card-content">
@@ -111,7 +111,7 @@ export default function Home() {
 
                 <div className="capability-card machine-shop">
                   <div className="card-background">
-                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&h=400&fit=crop&crop=center" alt="Machine Shop" />
+                    <img src="/web_images/k_img1.jpg" alt="Machine Shop" />
                     <div className="card-overlay"></div>
                   </div>
                   <div className="card-content">
