@@ -270,7 +270,9 @@ export default function Layout({ children }) {
                   <div>
                     Dall Mill Compound,<br />
                     Near Faruki Masjid,<br />
-                    Dushsagar Road, Rajkot – 360003
+                    Dushsagar Road,<br />
+                    Rajkot - 360003,<br />
+                    Gujarat, India
                   </div>
                 </div>
               </div>

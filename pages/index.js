@@ -426,10 +426,16 @@ export default function Home() {
             color: white;
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
             backdrop-filter: blur(5px);
+            gap: 20px;
           }
 
           .card-content > *:last-child {
             margin-top: auto;
+          }
+
+          .card-content .capability-cta {
+            margin-top: auto;
+            align-self: flex-start;
           }
 
           .capability-number {
@@ -499,7 +505,8 @@ export default function Home() {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
+            flex-grow: 0;
           }
 
           .feature-badge {
@@ -687,6 +694,122 @@ export default function Home() {
 
 
           /* Responsive Design */
+          @media (max-width: 1600px) {
+            .capabilities-showcase {
+              grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+              gap: 44px;
+            }
+
+            .capability-card {
+              height: auto;
+              min-height: 540px;
+            }
+
+            .card-content {
+              padding: 50px;
+            }
+
+            .card-content h3 {
+              font-size: 2.2rem;
+            }
+
+            .card-content p {
+              font-size: 1.1rem;
+            }
+
+            .capability-cta {
+              padding: 17px 34px;
+              font-size: 1.1rem;
+            }
+          }
+
+          @media (max-width: 1440px) {
+            .capabilities-showcase {
+              grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+              gap: 40px;
+            }
+
+            .capability-card {
+              height: auto;
+              min-height: 520px;
+            }
+
+            .card-content {
+              padding: 45px;
+            }
+
+            .card-content h3 {
+              font-size: 2.1rem;
+            }
+
+            .card-content p {
+              font-size: 1.05rem;
+            }
+
+            .capability-cta {
+              padding: 16px 32px;
+              font-size: 1.05rem;
+            }
+          }
+
+          @media (max-width: 1200px) {
+            .capabilities-showcase {
+              grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+              gap: 36px;
+            }
+
+            .capability-card {
+              height: auto;
+              min-height: 500px;
+            }
+
+            .card-content {
+              padding: 40px;
+            }
+
+            .card-content h3 {
+              font-size: 2rem;
+            }
+
+            .card-content p {
+              font-size: 1rem;
+            }
+
+            .capability-cta {
+              padding: 15px 30px;
+              font-size: 1rem;
+            }
+          }
+
+          @media (max-width: 1024px) {
+            .capabilities-showcase {
+              grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+              gap: 32px;
+            }
+
+            .capability-card {
+              height: auto;
+              min-height: 480px;
+            }
+
+            .card-content {
+              padding: 35px;
+            }
+
+            .card-content h3 {
+              font-size: 1.9rem;
+            }
+
+            .card-content p {
+              font-size: 0.95rem;
+            }
+
+            .capability-cta {
+              padding: 14px 28px;
+              font-size: 0.95rem;
+            }
+          }
+
           @media (max-width: 768px) {
             .hero-text h1 {
               font-size: 3rem;
@@ -715,21 +838,38 @@ export default function Home() {
             }
 
             .capability-card {
-              height: 480px;
+              height: auto;
+              min-height: 500px;
             }
 
             .card-content {
-              padding: 35px;
+              padding: 30px;
+              gap: 20px;
             }
 
             .card-content h3 {
-              font-size: 2rem;
+              font-size: 1.8rem;
+            }
+
+            .card-content p {
+              font-size: 0.95rem;
+              line-height: 1.5;
+            }
+
+            .capability-features {
+              gap: 8px;
+              margin-bottom: 20px;
+            }
+
+            .feature-badge {
+              padding: 7px 14px;
+              font-size: 0.85rem;
             }
 
             .capability-cta {
-              padding: 14px 28px;
-              font-size: 1rem;
-              letter-spacing: 0.4px;
+              padding: 12px 24px;
+              font-size: 0.95rem;
+              letter-spacing: 0.3px;
             }
 
             .main-cta {
@@ -753,33 +893,106 @@ export default function Home() {
               max-width: 500px;
             }
 
+            .capabilities-showcase {
+              gap: 20px;
+            }
+
             .capability-card {
-              height: 400px;
+              height: auto;
+              min-height: 450px;
             }
 
             .card-content {
-              padding: 24px;
+              padding: 20px;
+              gap: 16px;
             }
 
             .card-content h3 {
-              font-size: 1.5rem;
+              font-size: 1.4rem;
+              margin-bottom: 12px;
+            }
+
+            .card-content p {
+              font-size: 0.9rem;
+              line-height: 1.5;
+              margin-bottom: 16px;
             }
 
             .capability-icon {
-              width: 60px;
-              height: 60px;
+              width: 50px;
+              height: 50px;
+              margin-bottom: 16px;
+            }
+
+            .capability-features {
+              gap: 6px;
+              margin-bottom: 16px;
+            }
+
+            .feature-badge {
+              padding: 6px 12px;
+              font-size: 0.8rem;
             }
 
             .capability-cta {
-              padding: 12px 24px;
-              font-size: 0.9rem;
+              padding: 10px 20px;
+              font-size: 0.85rem;
               letter-spacing: 0.2px;
+              margin-top: auto;
+            }
+
+            .capability-number {
+              width: 45px;
+              height: 45px;
+              font-size: 1.2rem;
+              top: 15px;
+              right: 15px;
             }
 
             .main-cta {
-              padding: 18px 36px;
-              font-size: 1.1rem;
+              padding: 16px 32px;
+              font-size: 1rem;
               letter-spacing: 0.4px;
+            }
+          }
+
+          @media (max-width: 360px) {
+            .capability-card {
+              min-height: 420px;
+            }
+
+            .card-content {
+              padding: 16px;
+            }
+
+            .card-content h3 {
+              font-size: 1.3rem;
+            }
+
+            .card-content p {
+              font-size: 0.85rem;
+            }
+
+            .capability-icon {
+              width: 45px;
+              height: 45px;
+            }
+
+            .feature-badge {
+              padding: 5px 10px;
+              font-size: 0.75rem;
+            }
+
+            .capability-cta {
+              padding: 8px 16px;
+              font-size: 0.8rem;
+            }
+
+            .capability-number {
+              width: 40px;
+              height: 40px;
+              font-size: 1.1rem;
+            }
           }
         }
       `}</style>
