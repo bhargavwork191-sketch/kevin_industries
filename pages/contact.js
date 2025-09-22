@@ -88,7 +88,7 @@ export default function Contact() {
                       <div className="contact-text">
                         <h3>Email</h3>
                         <p>info@kevinindustries.com</p>
-                        <p>sales@kevinindustries.com</p>
+                        <p>kevindiecast@gmail.com</p>
                       </div>
                     </div>
 
