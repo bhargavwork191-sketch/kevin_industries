@@ -73,8 +73,8 @@ export default function Contact() {
                       </div>
                       <div className="contact-text">
                         <h3>Phone</h3>
-                        <p>+91 98242 22442</p>
-                        <p>+91 7405 227775</p>
+                        <p><a href="tel:+919824222442" className="phone-link">+91 98242 22442</a></p>
+                        <p><a href="tel:+917405227775" className="phone-link">+91 7405 227775</a></p>
                       </div>
                     </div>
 
@@ -371,6 +371,37 @@ export default function Contact() {
             color: #64748b;
             margin: 0 0 4px 0;
             line-height: 1.5;
+          }
+
+          .phone-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+            pointer-events: none;
+            cursor: default;
+          }
+
+          /* Enable clickable functionality only on mobile and tablet */
+          @media (max-width: 1024px) {
+            .phone-link {
+              color: #0ea5e9;
+              font-weight: 600;
+              pointer-events: auto;
+              cursor: pointer;
+            }
+
+            .phone-link:hover {
+              color: #3b82f6;
+              border-bottom-color: #3b82f6;
+              transform: translateY(-1px);
+            }
+
+            .phone-link:active {
+              color: #1d4ed8;
+              transform: translateY(0);
+            }
           }
 
           /* Contact Form */
@@ -762,6 +793,7 @@ export default function Contact() {
               font-size: 0.95rem;
             }
 
+
             .contact-form-container {
               padding: 24px;
             }
@@ -854,6 +886,7 @@ export default function Contact() {
             .contact-text p {
               font-size: 0.9rem;
             }
+
 
             .contact-form-container {
               padding: 20px;
@@ -954,6 +987,7 @@ export default function Contact() {
               font-size: 0.85rem;
             }
 
+
             .contact-form-container {
               padding: 16px;
             }
@@ -1048,6 +1082,7 @@ export default function Contact() {
             .contact-text p {
               font-size: 0.8rem;
             }
+
 
             .contact-form-container {
               padding: 12px;
