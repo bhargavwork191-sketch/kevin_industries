@@ -212,7 +212,7 @@ export default function Contact() {
               <div className="map-container">
                 <div className="map-wrapper">
                   <iframe
-                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29531.854997878032!2d70.7903574751315!3d22.297608450036858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959b5faa610e8a7%3A0x950151975e30ebf!2sKevin%20Industries%20(Pressure%20Die%20Casting%20Industry)!5e0!3m2!1sen!2sin!4v1758653544652!5m2!1sen!2sin"
+                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29531.854997878032!2d70.7903574751315!3d22.297608450036858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959b5faa610e8a7%3A0x950151975e30ebf!2sKevin%20Industries!5e0!3m2!1sen!2sin!4v1758653544652!5m2!1sen!2sin"
                     width="100%"
                     height="400"
                     style={{ border: 0, borderRadius: '16px' }}
@@ -223,7 +223,7 @@ export default function Contact() {
                   <div className="map-overlay">
                     <button 
                       className="map-expand-btn"
-                       onClick={() => window.open('https://maps.app.goo.gl/X8Neh9YJwHdJKQXj9', '_blank')}
+                       onClick={() => window.open('https://maps.app.goo.gl/uDw64AaMDN6X9H4G7', '_blank')}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -236,7 +236,6 @@ export default function Contact() {
                 <div className="map-info">
                   <div className="location-details">
                     <h3>📍 Kevin Industries</h3>
-                    <p><strong>Address:</strong> Dall Mill Compound, Near Faruki Masjid, Dushsagar Road, Rajkot - 360003, Gujarat, India</p>
                     <div className="map-actions">
                       <button 
                         className="directions-btn"
@@ -253,8 +252,8 @@ export default function Contact() {
                          onClick={() => navigator.share ? navigator.share({
                            title: 'Kevin Industries Location',
                            text: 'Visit Kevin Industries at Dall Mill Compound, Near Faruki Masjid, Dushsagar Road, Rajkot, Gujarat',
-                           url: 'https://maps.app.goo.gl/X8Neh9YJwHdJKQXj9'
-                         }) : navigator.clipboard.writeText('https://maps.app.goo.gl/X8Neh9YJwHdJKQXj9')}
+                           url: 'https://maps.app.goo.gl/uDw64AaMDN6X9H4G7'
+                         }) : navigator.clipboard.writeText('https://maps.app.goo.gl/uDw64AaMDN6X9H4G7')}
                       >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                           <circle cx="18" cy="5" r="3"/>
