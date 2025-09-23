@@ -99,7 +99,7 @@ export default function Gallery() {
               <div className="hero-content">
                 <h1>Product Gallery</h1>
                 <p className="hero-subtitle">
-                  Real products showcasing our precision engineering capabilities in foundry, tool room, and casting
+                Real Product showcasing our precision engineering capabilities.
                 </p>
                 <div className="gallery-stats">
                   <div className="stat-item">

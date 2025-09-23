@@ -19,8 +19,8 @@ export default function Home() {
                 <div className="hero-text">
                   <span className="hero-tag">Six Decades of Manufacturing Excellence</span>
                   <h1>Kevin Industries</h1>
-                  <h2>Precision Engineering • Advanced Casting • Expert Machining</h2>
-                  <p>Since 1963, we've been delivering world-class manufacturing solutions with ISO 9001:2015 certification. From precision tooling to advanced foundry operations and CNC machining, we bring your vision to life with unmatched quality and reliability.</p>
+                  <h2>Precesion Engineering • Pressure Die Casting • Machining</h2>
+                  <p>Since 1963, we have been delivering best pressure die casting. From precision Die to casting and machining we bring your vision to life with unmatched quality, consistency and reliability.</p>
                   <div className="hero-stats">
                     <div className="stat-item">
                       <div className="stat-number">60+</div>
@@ -44,8 +44,8 @@ export default function Home() {
           <section className="creative-capabilities">
             <div className="container">
               <div className="section-header">
-                <h2>Our Manufacturing Capabilities</h2>
-                <p className="section-subtitle">Three specialized capabilities working in perfect harmony to deliver exceptional manufacturing solutions tailored to your needs</p>
+                <h2>Our Manufacturing facilities</h2>
+                <p className="section-subtitle">Three specialized facilities working together to deliver best quality component tailored as per your needs.</p>
               </div>
               
               <div className="capabilities-showcase">
@@ -63,7 +63,7 @@ export default function Home() {
                         <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" strokeWidth="2"/>
                       </svg>
                     </div>
-                    <h3>Precision Tooling</h3>
+                    <h3>Tool Room</h3>
                     <p>Precision tooling solutions including custom die sets, specialized jigs, and advanced fixtures. Our expert team develops high-precision tools that ensure consistent, repeatable manufacturing processes.</p>
                     <div className="capability-features">
                       <span className="feature-badge">Custom Die Sets</span>
@@ -96,12 +96,11 @@ export default function Home() {
                         <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                       </svg>
                     </div>
-                    <h3>Advanced Casting</h3>
-                    <p>State-of-the-art pressure die casting operations with precision-engineered molds and premium metal alloys. We deliver durable, high-quality components with exceptional dimensional accuracy and surface finish.</p>
+                    <h3>High Pressure Die Casting</h3>
+                    <p>Injects molten metal into Die set with high pressure.</p>
                     <div className="capability-features">
                       <span className="feature-badge">Pressure Die Casting</span>
                       <span className="feature-badge">Heat Treatment</span>
-                      <span className="feature-badge">Premium Alloys</span>
                     </div>
                     <button 
                       className="capability-cta"
@@ -132,11 +131,9 @@ export default function Home() {
                         <path d="M6 18H18" stroke="currentColor" strokeWidth="2"/>
                       </svg>
                     </div>
-                    <h3>Precision Machining</h3>
-                    <p>Advanced CNC machining services with multi-axis capabilities and precision tooling. We transform your designs into reality with meticulous attention to detail and rigorous quality control standards.</p>
+                    <h3>Machining</h3>
+                    <p>We deliver durable , high quality components with precise dimensional accuracy and surface finish as per requirement.</p>
                     <div className="capability-features">
-                      <span className="feature-badge">CNC Machining</span>
-                      <span className="feature-badge">Multi-Axis Operations</span>
                       <span className="feature-badge">Quality Control</span>
                     </div>
                     <button 
@@ -170,7 +167,7 @@ export default function Home() {
           <section className="excellence-section">
             <div className="container">
               <div className="section-header">
-                <h2>Manufacturing Excellence Showcase</h2>
+                <h2>Glimse of Our work</h2>
                 <p className="section-subtitle">Explore our portfolio of precision-engineered components and witness the quality craftsmanship that sets us apart in the industry</p>
               </div>
               <ExcellenceImages />
