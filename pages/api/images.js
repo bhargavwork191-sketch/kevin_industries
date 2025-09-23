@@ -31,7 +31,7 @@ export default async function handler(req, res) {
           .select('*')
           .order('created_at', { ascending: true })
         
-        // Only filter by type since page column doesn't exist
+        // Filter by type (which maps to page functionality)
         if (type) {
           query = query.eq('type', type)
         }
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
       return true
     })
 
-    // Sort by order_index
+    // Sort by order_index (for JSON fallback)
     filteredImages.sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
     
     res.status(200).json(filteredImages)

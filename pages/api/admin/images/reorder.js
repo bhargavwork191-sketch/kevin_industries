@@ -19,14 +19,23 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Page and images data required' })
     }
 
-    // Update order for each image in the database
-    const updatePromises = reorderData.map(({ id, order }) => 
-      supabaseAdmin
+    console.log('🔄 Reordering images for page:', page, 'with data:', reorderData)
+
+    // Since the current database schema doesn't have order_index column,
+    // we'll update the created_at timestamp to reflect the new order
+    // This ensures the database order matches the admin panel order
+    
+    const updatePromises = reorderData.map(({ id, order }, index) => {
+      // Create a new timestamp based on the order
+      // Earlier items get earlier timestamps
+      const newTimestamp = new Date(Date.now() - (reorderData.length - index) * 1000).toISOString()
+      
+      return supabaseAdmin
         .from('images')
-        .update({ order_index: order })
+        .update({ created_at: newTimestamp })
         .eq('id', id)
-        .eq('page', page)
-    )
+        .eq('type', page) // Use type instead of page since that's what exists
+    })
 
     const results = await Promise.all(updatePromises)
     
@@ -37,6 +46,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Error updating some image orders' })
     }
 
+    console.log('✅ Successfully updated image order in database')
     res.status(200).json({ success: true })
   } catch (error) {
     console.error('Error reordering images:', error)
