@@ -206,17 +206,68 @@ export default function Contact() {
             <div className="container">
               <div className="section-header">
                 <h2>Find Us</h2>
-                <p className="section-subtitle">Visit our manufacturing facility in Rajkot, Gujarat at Dall Mill Compound</p>
+                <p className="section-subtitle">Visit our manufacturing facility at Dall Mill Compound, Near Faruki Masjid, Dushsagar Road, Rajkot - 360003, Gujarat, India</p>
               </div>
               <div className="map-container">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.5!2d70.8!3d22.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c9b8b8b8b8b8%3A0x1234567890abcdef!2sKevin%20Industries%2C%20Rajkot%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1695123456789!5m2!1sen!2sin"
-                  width="100%"
-                  height="400"
-                  style={{ border: 0, borderRadius: '16px' }}
-                  allowFullScreen
-                  loading="lazy"
-                ></iframe>
+                <div className="map-wrapper">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.564!2d70.8223865!3d22.2941624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c9b0b2f4b3c3%3A0x8f8f4b9a9a4a8a8a!2sShakti%20Industrial%20Zone%2C%20Dudhsagar%20Rd%2C%20Rajkot%2C%20Gujarat%20360003%2C%20India!5e0!3m2!1sen!2sin!4v1695123456789!5m2!1sen!2sin"
+                    width="100%"
+                    height="400"
+                    style={{ border: 0, borderRadius: '16px' }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                  <div className="map-overlay">
+                    <button 
+                      className="map-expand-btn"
+                      onClick={() => window.open('https://maps.app.goo.gl/7xwT1vQkaxDsgQpp7?g_st=aw', '_blank')}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15,3 21,3 21,9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      View Larger Map
+                    </button>
+                  </div>
+                </div>
+                <div className="map-info">
+                  <div className="location-details">
+                    <h3>📍 Kevin Industries</h3>
+                    <p><strong>Address:</strong> Dall Mill Compound, Near Faruki Masjid, Dushsagar Road, Rajkot - 360003, Gujarat, India</p>
+                    <div className="map-actions">
+                      <button 
+                        className="directions-btn"
+                        onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=22.2941624,70.8223865', '_blank')}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Get Directions
+                      </button>
+                      <button 
+                        className="share-btn"
+                        onClick={() => navigator.share ? navigator.share({
+                          title: 'Kevin Industries Location',
+                          text: 'Visit Kevin Industries at Shakti Industrial Zone, Dudhsagar Road, Rajkot, Gujarat',
+                          url: 'https://maps.app.goo.gl/7xwT1vQkaxDsgQpp7?g_st=aw'
+                        }) : navigator.clipboard.writeText('https://maps.app.goo.gl/7xwT1vQkaxDsgQpp7?g_st=aw')}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="18" cy="5" r="3"></circle>
+                          <circle cx="6" cy="12" r="3"></circle>
+                          <circle cx="18" cy="19" r="3"></circle>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                        Share Location
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -535,9 +586,123 @@ export default function Contact() {
           }
 
           .map-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            align-items: start;
+          }
+
+          .map-wrapper {
+            position: relative;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          }
+
+          .map-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+          }
+
+          .map-expand-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0ea5e9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+          }
+
+          .map-expand-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+          }
+
+          .map-info {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+          }
+
+          .location-details h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .location-details p {
+            font-size: 1rem;
+            color: #64748b;
+            margin: 0 0 16px 0;
+            line-height: 1.6;
+          }
+
+          .location-details strong {
+            color: #0f172a;
+            font-weight: 600;
+          }
+
+          .map-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+          }
+
+          .directions-btn,
+          .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+          }
+
+          .directions-btn {
+            background: #0ea5e9;
+            color: white;
+          }
+
+          .directions-btn:hover {
+            background: #0284c7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+          }
+
+          .share-btn {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+          }
+
+          .share-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           }
 
           /* Responsive Design */
@@ -565,6 +730,11 @@ export default function Contact() {
 
             .map-section {
               padding: 90px 0;
+            }
+
+            .map-container {
+              grid-template-columns: 1fr;
+              gap: 24px;
             }
           }
 
@@ -609,6 +779,15 @@ export default function Contact() {
 
             .map-section {
               padding: 80px 0;
+            }
+
+            .map-container {
+              grid-template-columns: 1fr;
+              gap: 20px;
+            }
+
+            .map-info {
+              padding: 24px;
             }
           }
 
@@ -819,6 +998,24 @@ export default function Contact() {
 
             .map-container iframe {
               height: 350px;
+            }
+
+            .map-container {
+              grid-template-columns: 1fr;
+              gap: 16px;
+            }
+
+            .map-info {
+              padding: 20px;
+            }
+
+            .location-details h3 {
+              font-size: 1.25rem;
+            }
+
+            .map-actions {
+              flex-direction: column;
+              gap: 8px;
             }
           }
 
