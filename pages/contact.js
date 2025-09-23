@@ -67,8 +67,8 @@ export default function Contact() {
                   <div className="contact-details">
                     <div className="contact-item">
                       <div className="contact-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04004 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.89391 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5261 15.5775C21.8428 15.9518 22.0122 16.4296 22 16.92Z"/>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                         </svg>
                       </div>
                       <div className="contact-text">
@@ -80,9 +80,9 @@ export default function Contact() {
 
                     <div className="contact-item">
                       <div className="contact-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"/>
-                          <polyline points="22,6 12,13 2,6"/>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <rect x="2" y="4" width="20" height="16" rx="2"/>
+                          <path d="m22 7-10 5L2 7"/>
                         </svg>
                       </div>
                       <div className="contact-text">
@@ -94,8 +94,8 @@ export default function Contact() {
 
                     <div className="contact-item">
                       <div className="contact-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.3639 3.63604C20.0518 5.32387 21 7.61305 21 10Z"/>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                           <circle cx="12" cy="10" r="3"/>
                         </svg>
                       </div>
@@ -122,9 +122,9 @@ export default function Contact() {
                   {sent ? (
                     <div className="success-message">
                       <div className="success-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"/>
-                          <polyline points="22,4 12,14.01 9,11.01"/>
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="m9 12 2 2 4-4"/>
                         </svg>
                       </div>
                       <h3>Message Sent Successfully!</h3>
@@ -190,8 +190,9 @@ export default function Contact() {
 
                       <button type="submit" className="submit-button">
                         Send Message
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="m22 2-7 7 7 7"/>
+                          <path d="M15 9H2"/>
                         </svg>
                       </button>
                     </form>
@@ -211,7 +212,7 @@ export default function Contact() {
               <div className="map-container">
                 <div className="map-wrapper">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.564!2d70.8223865!3d22.2941624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c9b0b2f4b3c3%3A0x8f8f4b9a9a4a8a8a!2sShakti%20Industrial%20Zone%2C%20Dudhsagar%20Rd%2C%20Rajkot%2C%20Gujarat%20360003%2C%20India!5e0!3m2!1sen!2sin!4v1695123456789!5m2!1sen!2sin"
+                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29531.854997878032!2d70.7903574751315!3d22.297608450036858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959b5faa610e8a7%3A0x950151975e30ebf!2sKevin%20Industries%20(Pressure%20Die%20Casting%20Industry)!5e0!3m2!1sen!2sin!4v1758653544652!5m2!1sen!2sin"
                     width="100%"
                     height="400"
                     style={{ border: 0, borderRadius: '16px' }}
@@ -222,12 +223,11 @@ export default function Contact() {
                   <div className="map-overlay">
                     <button 
                       className="map-expand-btn"
-                      onClick={() => window.open('https://maps.app.goo.gl/7xwT1vQkaxDsgQpp7?g_st=aw', '_blank')}
+                       onClick={() => window.open('https://maps.app.goo.gl/X8Neh9YJwHdJKQXj9', '_blank')}
                     >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15,3 21,3 21,9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <path d="m15 3 6 6-6 6"/>
                       </svg>
                       View Larger Map
                     </button>
@@ -242,26 +242,26 @@ export default function Contact() {
                         className="directions-btn"
                         onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=22.2941624,70.8223865', '_blank')}
                       >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                          <circle cx="12" cy="10" r="3"></circle>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                          <circle cx="12" cy="10" r="3"/>
                         </svg>
                         Get Directions
                       </button>
                       <button 
                         className="share-btn"
-                        onClick={() => navigator.share ? navigator.share({
-                          title: 'Kevin Industries Location',
-                          text: 'Visit Kevin Industries at Shakti Industrial Zone, Dudhsagar Road, Rajkot, Gujarat',
-                          url: 'https://maps.app.goo.gl/7xwT1vQkaxDsgQpp7?g_st=aw'
-                        }) : navigator.clipboard.writeText('https://maps.app.goo.gl/7xwT1vQkaxDsgQpp7?g_st=aw')}
+                         onClick={() => navigator.share ? navigator.share({
+                           title: 'Kevin Industries Location',
+                           text: 'Visit Kevin Industries at Dall Mill Compound, Near Faruki Masjid, Dushsagar Road, Rajkot, Gujarat',
+                           url: 'https://maps.app.goo.gl/X8Neh9YJwHdJKQXj9'
+                         }) : navigator.clipboard.writeText('https://maps.app.goo.gl/X8Neh9YJwHdJKQXj9')}
                       >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <circle cx="18" cy="5" r="3"></circle>
-                          <circle cx="6" cy="12" r="3"></circle>
-                          <circle cx="18" cy="19" r="3"></circle>
-                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <circle cx="18" cy="5" r="3"/>
+                          <circle cx="6" cy="12" r="3"/>
+                          <circle cx="18" cy="19" r="3"/>
+                          <path d="m8.59 13.51 6.83 3.98"/>
+                          <path d="m15.41 6.51-6.83 3.98"/>
                         </svg>
                         Share Location
                       </button>
@@ -401,13 +401,15 @@ export default function Contact() {
           .contact-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 2px solid #0ea5e9;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #0ea5e9;
             flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
           }
 
           .contact-text h3 {
