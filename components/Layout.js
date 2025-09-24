@@ -42,6 +42,11 @@ export default function Layout({ children }) {
     };
   }, [isMobileMenuOpen]);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [router.pathname]);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
