@@ -12,7 +12,14 @@ export default function Layout({ children }) {
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const { isAuthenticated, logout, login } = useAuth();
+
+  useEffect(() => {
+    setIsClient(true);
+    // Reset mobile menu state on client-side hydration
+    setIsMobileMenuOpen(false);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,6 +53,21 @@ export default function Layout({ children }) {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [router.pathname]);
+
+  // Handle router events for better state management
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsMobileMenuOpen(false);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on('routeChangeError', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeError', handleRouteChange);
+    };
+  }, [router.events]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -108,6 +130,8 @@ export default function Layout({ children }) {
   };
 
   const isActive = (path) => {
+    // Only check active state on client-side to avoid hydration mismatch
+    if (!isClient || !router.pathname) return false;
     return router.pathname === path;
   };
 
@@ -186,7 +210,7 @@ export default function Layout({ children }) {
       {isMobileMenuOpen && (
         <div className="mobile-menu-overlay" onClick={() => setIsMobileMenuOpen(false)}>
           <div className="mobile-menu-content" onClick={(e) => e.stopPropagation()}>
-            <div className="mobile-nav-links">
+            <div className="mobile-nav-links" key={router.pathname}>
               <Link href="/" className={`mobile-nav-link ${isActive('/') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
               <Link href="/about" className={`mobile-nav-link ${isActive('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
               <Link href="/gallery" className={`mobile-nav-link ${isActive('/gallery') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
