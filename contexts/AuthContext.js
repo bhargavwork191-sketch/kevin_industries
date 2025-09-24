@@ -48,6 +48,12 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ username, password }),
       });
 
+      // Check if response is ok before trying to parse JSON
+      if (!response.ok) {
+        console.error('Login API error:', response.status, response.statusText);
+        return false;
+      }
+
       const data = await response.json();
 
       if (data.success) {
