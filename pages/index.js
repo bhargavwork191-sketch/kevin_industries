@@ -1267,6 +1267,31 @@ export default function Home() {
             }
           }
 
+          @media (max-width: 1024px) and (min-width: 769px) {
+            .components-timeline {
+              padding: 0 20px;
+            }
+
+            .components-timeline::before {
+              left: 25px;
+            }
+
+            .timeline-item {
+              padding-left: 60px;
+            }
+
+            .timeline-marker {
+              left: -40px;
+              width: 55px;
+              height: 55px;
+            }
+
+            .timeline-marker svg {
+              width: 22px;
+              height: 22px;
+            }
+          }
+
           @media (max-width: 768px) {
             .hero-text h1 {
               font-size: 3rem;
@@ -1343,6 +1368,30 @@ export default function Home() {
 
             .section-header h2 {
               font-size: 1.75rem;
+            }
+
+            .components-timeline {
+              padding: 0 10px;
+            }
+
+            .components-timeline::before {
+              left: 15px;
+            }
+
+            .timeline-item {
+              padding-left: 45px;
+              margin-bottom: 25px;
+            }
+
+            .timeline-marker {
+              left: -30px;
+              width: 45px;
+              height: 45px;
+            }
+
+            .timeline-marker svg {
+              width: 18px;
+              height: 18px;
             }
 
             .section-subtitle {
@@ -1449,6 +1498,10 @@ export default function Home() {
               width: 40px;
               height: 40px;
               font-size: 1.1rem;
+            }
+
+            .components-timeline {
+              padding: 0 15px;
             }
 
             .components-timeline::before {
