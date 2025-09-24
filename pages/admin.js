@@ -336,159 +336,52 @@ export default function Admin() {
     <Layout>
       <main>
         <div className="admin-container">
-          <div className="admin-header">
-            <div className="header-content">
-              <div className="header-main">
+          {/* Admin Header */}
+          <section className="admin-hero-section">
+            <div className="container">
+              <div className="section-header">
                 <h1>Admin Dashboard</h1>
-                <p>Manage images and view contact messages</p>
+                <p>Manage your website content and view contact messages</p>
               </div>
-              <div className="header-stats">
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <polyline points="21,15 16,10 5,21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
                   </div>
-                  <div className="stat-content">
-                    <span className="stat-number">{galleryImages.length}</span>
-                    <span className="stat-label">Gallery</span>
-                  </div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="stat-content">
-                    <span className="stat-number">{excellenceImages.length}</span>
-                    <span className="stat-label">Excellence</span>
-                  </div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="stat-content">
-                    <span className="stat-number">{carosalImages.length}</span>
-                    <span className="stat-label">Carousel</span>
-                  </div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04004 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.89391 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5261 15.5775C21.8428 15.9518 22.0122 16.4296 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="stat-content">
-                    <span className="stat-number">{contactMessages.length}</span>
-                    <span className="stat-label">Messages</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </section>
 
-          {/* Professional Section Navigation */}
-          <div className="section-navigation">
-            <div className="section-cards">
-              <div 
-                className={`section-card ${activeTab === 'gallery' ? 'active' : ''}`}
+          {/* Simple Tab Navigation */}
+          <section className="admin-tabs-section">
+            <div className="container">
+              <div className="tab-navigation">
+                <button 
+                  className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
                 onClick={() => setActiveTab('gallery')}
               >
-                <div className="section-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <polyline points="21,15 16,10 5,21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <div className="section-content">
-                  <h3>Gallery Images</h3>
-                  <p>{galleryImages.length} images</p>
-                </div>
-                <div className="section-arrow">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-
-              <div 
-                className={`section-card ${activeTab === 'excellence' ? 'active' : ''}`}
+                  GALLERY ({galleryImages.length})
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'excellence' ? 'active' : ''}`}
                 onClick={() => setActiveTab('excellence')}
               >
-                <div className="section-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <div className="section-content">
-                  <h3>Excellence Images</h3>
-                  <p>{excellenceImages.length} images</p>
-                </div>
-                <div className="section-arrow">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-
-              <div 
-                className={`section-card ${activeTab === 'carosal' ? 'active' : ''}`}
+                  EXCELLENCE ({excellenceImages.length})
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'carosal' ? 'active' : ''}`}
                 onClick={() => setActiveTab('carosal')}
               >
-                <div className="section-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <div className="section-content">
-                  <h3>Carousel Images</h3>
-                  <p>{carosalImages.length} images</p>
-                </div>
-                <div className="section-arrow">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-
-              <div 
-                className={`section-card ${activeTab === 'messages' ? 'active' : ''}`}
+                  CAROUSEL ({carosalImages.length})
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'messages' ? 'active' : ''}`}
                 onClick={() => setActiveTab('messages')}
               >
-                <div className="section-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06679 2.16708 8.43376 2.48353C8.80073 2.79999 9.04004 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.89391 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5261 15.5775C21.8428 15.9518 22.0122 16.4296 22 16.92Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  CONTACT ({contactMessages.length})
+                </button>
                 </div>
-                <div className="section-content">
-                  <h3>Contact Messages</h3>
-                  <p>{contactMessages.length} messages</p>
                 </div>
-                <div className="section-arrow">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
+          </section>
 
           {/* Upload Section - Only for Image Tabs */}
           {activeTab !== 'messages' && (
-            <div className="upload-section">
+            <section className="upload-section">
+              <div className="container">
               <h2>
                 {activeTab === 'gallery' && 'Upload New Gallery Image'}
                 {activeTab === 'excellence' && 'Upload New Excellence Image'}
@@ -530,95 +423,100 @@ export default function Admin() {
                 </div>
               </div>
             </div>
+          </section>
           )}
 
           {/* Images Grid with Drag & Drop */}
           {activeTab !== 'messages' && (
-            <div className="images-section">
-              <h2>Current {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Images ({getCurrentImages().length})</h2>
-              <p className="drag-hint">💡 Drag and drop images to reorder them</p>
-              {loading ? (
-                <div className="loading">Loading images...</div>
-              ) : (
-                <div className="images-grid">
-                  {getCurrentImages().map((image, index) => (
-                    <div 
-                      key={image.id || index} 
-                      className="image-card"
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, image)}
-                      onDragOver={handleDragOver}
-                      onDrop={(e) => handleDrop(e, index)}
-                    >
-                      <div className="drag-handle">⋮⋮</div>
-                      <img src={image.url} alt={image.alt || `Image ${index + 1}`} />
-                      <div className="image-actions">
-                        <span className="order-number">{index + 1}</span>
-                        <button
-                          onClick={() => handleDelete(image.id || index)}
-                          className="delete-btn"
-                          title="Delete image"
-                        >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                            <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
+            <section className="images-section">
+              <div className="container">
+                <h2>Current {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Images ({getCurrentImages().length})</h2>
+                <p className="drag-hint">💡 Drag and drop images to reorder them</p>
+                {loading ? (
+                  <div className="loading">Loading images...</div>
+                ) : (
+                  <div className="images-grid">
+                    {getCurrentImages().map((image, index) => (
+                      <div 
+                        key={image.id || index} 
+                        className="image-card"
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, image)}
+                        onDragOver={handleDragOver}
+                        onDrop={(e) => handleDrop(e, index)}
+                      >
+                        <div className="drag-handle">⋮⋮</div>
+                        <img src={image.url} alt={image.alt || `Image ${index + 1}`} />
+                        <div className="image-actions">
+                          <span className="order-number">{index + 1}</span>
+                          <button
+                            onClick={() => handleDelete(image.id || index)}
+                            className="delete-btn"
+                            title="Delete image"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           )}
 
           {/* Contact Messages Section */}
           {activeTab === 'messages' && (
-            <div className="messages-section">
-              <h2>Contact Messages ({contactMessages.length})</h2>
-              {loading ? (
-                <div className="loading">Loading messages...</div>
-              ) : contactMessages.length === 0 ? (
-                <div className="no-messages">
-                  <p>No contact messages yet.</p>
-                </div>
-              ) : (
-                <div className="messages-list">
-                  {contactMessages.map((message) => (
-                    <div 
-                      key={message.id} 
-                      className={`message-card ${!message.read ? 'unread' : ''}`}
-                      onClick={() => setSelectedMessage(message)}
-                    >
-                      <div className="message-header">
-                        <div className="message-sender">
-                          <div className="sender-avatar">
-                            {message.name.charAt(0).toUpperCase()}
+            <section className="messages-section">
+              <div className="container">
+                <h2>Contact Messages ({contactMessages.length})</h2>
+                {loading ? (
+                  <div className="loading">Loading messages...</div>
+                ) : contactMessages.length === 0 ? (
+                  <div className="no-messages">
+                    <p>No contact messages yet.</p>
+                  </div>
+                ) : (
+                  <div className="messages-list">
+                    {contactMessages.map((message) => (
+                      <div 
+                        key={message.id} 
+                        className={`message-card ${!message.read ? 'unread' : ''}`}
+                        onClick={() => setSelectedMessage(message)}
+                      >
+                        <div className="message-header">
+                          <div className="message-sender">
+                            <div className="sender-avatar">
+                              {message.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="sender-info">
+                              <h4>{message.name}</h4>
+                              <p>{message.email}</p>
+                            </div>
                           </div>
-                          <div className="sender-info">
-                            <h4>{message.name}</h4>
-                            <p>{message.email}</p>
+                          <div className="message-meta">
+                            <span className="message-time">
+                              {new Date(message.created_at).toLocaleDateString()}
+                            </span>
+                            {!message.read && <span className="unread-badge">New</span>}
                           </div>
                         </div>
-                        <div className="message-meta">
-                          <span className="message-time">
-                            {new Date(message.created_at).toLocaleDateString()}
-                          </span>
-                          {!message.read && <span className="unread-badge">New</span>}
+                        <div className="message-preview">
+                          <p>{message.message.substring(0, 100)}...</p>
                         </div>
+                        {message.mobile && (
+                          <div className="message-phone">
+                            <strong>Phone:</strong> {message.mobile}
+                          </div>
+                        )}
                       </div>
-                      <div className="message-preview">
-                        <p>{message.message.substring(0, 100)}...</p>
-                      </div>
-                      {message.mobile && (
-                        <div className="message-phone">
-                          <strong>Phone:</strong> {message.mobile}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
           )}
         </div>
 
@@ -691,26 +589,132 @@ export default function Admin() {
         .admin-container {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 40px 20px;
+          padding: 0;
         }
 
-        .admin-header {
-          margin-bottom: 40px;
+        /* Admin Hero Section - Same as other pages */
+        .admin-hero-section {
+          background: white;
+          padding: 100px 0 60px;
+          position: relative;
         }
 
-        .header-content {
+        .admin-hero-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+          z-index: 1;
+        }
+
+        .admin-hero-section .container {
+          position: relative;
+          z-index: 2;
+        }
+
+        .admin-hero-section .section-header {
+          text-align: center;
+          margin-bottom: 0;
+        }
+
+        .admin-hero-section .section-header h1 {
+          font-size: 3rem;
+          font-weight: 800;
+          margin: 0 0 16px 0;
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          position: relative;
+        }
+
+        .admin-hero-section .section-header h1::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 4px;
+          background: linear-gradient(90deg, var(--accent), #3b82f6);
+          border-radius: 2px;
+        }
+
+        .admin-hero-section .section-header p {
+          font-size: 1.125rem;
+          color: #64748b;
+          margin: 0;
+          line-height: 1.6;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        /* Admin Tabs Section */
+        .admin-tabs-section {
+          background: white;
+          padding: 40px 0;
+          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tab-navigation {
           display: flex;
-          justify-content: space-between;
-          align-items: center;
+          gap: 8px;
+          justify-content: center;
           flex-wrap: wrap;
-          gap: 1rem;
         }
 
-        .admin-header h1 {
-          font-size: 36px;
-          font-weight: 700;
-          color: var(--nav);
-          margin: 0 0 16px;
+        .tab-btn {
+          padding: 12px 24px;
+          border-radius: 12px;
+          background: transparent;
+          border: 1px solid transparent;
+          font-weight: 600;
+          font-size: 14px;
+          color: #64748b;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .tab-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(59, 130, 246, 0.1));
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 12px;
+        }
+
+        .tab-btn:hover {
+          color: var(--accent);
+          border-color: rgba(14, 165, 233, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .tab-btn:hover::before {
+          opacity: 1;
+        }
+
+        .tab-btn.active {
+          background: linear-gradient(135deg, var(--accent), #3b82f6);
+          color: white;
+          border-color: transparent;
+          box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .tab-btn.active::before {
+          opacity: 0;
         }
 
         .logout-btn {
@@ -797,40 +801,69 @@ export default function Admin() {
 
         /* Professional Section Navigation */
         .section-navigation {
-          margin-bottom: 40px;
+          margin-bottom: 50px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-radius: 20px;
+          padding: 30px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .section-cards {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 20px;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 24px;
         }
 
         .section-card {
-          background: white;
-          border: 2px solid #e2e8f0;
-          border-radius: 16px;
-          padding: 24px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 28px;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 20px;
           position: relative;
           overflow: hidden;
         }
 
+        .section-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(59, 130, 246, 0.1));
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 20px;
+        }
+
         .section-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-          border-color: #0ea5e9;
+          transform: translateY(-6px);
+          box-shadow: 0 16px 40px rgba(14, 165, 233, 0.2);
+          border-color: rgba(14, 165, 233, 0.3);
+        }
+
+        .section-card:hover::before {
+          opacity: 1;
         }
 
         .section-card.active {
-          background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+          background: linear-gradient(135deg, var(--accent), #3b82f6);
           color: white;
-          border-color: #0ea5e9;
-          box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+          border-color: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 12px 35px rgba(14, 165, 233, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .section-card.active::before {
+          opacity: 0;
         }
 
         .section-card.active .section-icon {
@@ -848,76 +881,96 @@ export default function Admin() {
         }
 
         .section-icon {
-          width: 48px;
-          height: 48px;
-          background: #f1f5f9;
-          border-radius: 12px;
+          width: 56px;
+          height: 56px;
+          background: rgba(14, 165, 233, 0.1);
+          border-radius: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #0ea5e9;
+          color: var(--accent);
           flex-shrink: 0;
+          border: 1px solid rgba(14, 165, 233, 0.2);
+          transition: all 0.3s ease;
         }
 
         .section-content {
           flex: 1;
+          position: relative;
+          z-index: 1;
         }
 
         .section-content h3 {
-          font-size: 1.25rem;
+          font-size: 1.4rem;
           font-weight: 600;
-          margin: 0 0 4px 0;
-          color: #1e293b;
+          margin: 0 0 8px 0;
+          color: var(--nav);
+          transition: color 0.3s ease;
         }
 
         .section-content p {
-          font-size: 0.875rem;
-          color: #64748b;
+          font-size: 1rem;
+          color: var(--muted);
           margin: 0;
+          transition: color 0.3s ease;
         }
 
         .section-arrow {
-          color: #94a3b8;
-          transition: transform 0.3s ease;
+          color: var(--muted);
+          transition: all 0.3s ease;
+          position: relative;
+          z-index: 1;
         }
 
         .section-card:hover .section-arrow {
-          transform: translateX(4px);
+          transform: translateX(6px);
+          color: var(--accent);
+        }
+
+        .section-card:hover .section-icon {
+          background: rgba(14, 165, 233, 0.2);
+          border-color: rgba(14, 165, 233, 0.4);
+          transform: scale(1.05);
         }
 
         /* Header Stats */
         .header-stats {
           display: flex;
-          gap: 16px;
+          gap: 20px;
           flex-wrap: wrap;
+          justify-content: center;
+          margin-top: 20px;
         }
 
         .stat-card {
           display: flex;
           align-items: center;
-          gap: 12px;
-          background: white;
-          padding: 16px 20px;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-          border: 1px solid #e2e8f0;
+          gap: 16px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 20px;
+          min-width: 220px;
           transition: all 0.3s ease;
         }
 
         .stat-card:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 8px 25px rgba(14, 165, 233, 0.15);
+          border-color: rgba(14, 165, 233, 0.3);
         }
 
         .stat-icon {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #0ea5e9, #3b82f6);
-          border-radius: 10px;
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, var(--accent), #3b82f6);
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
+          box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
 
         .stat-content {
@@ -926,16 +979,17 @@ export default function Admin() {
         }
 
         .stat-number {
-          font-size: 1.5rem;
+          font-size: 1.6rem;
           font-weight: 700;
-          color: #1e293b;
+          color: var(--nav);
           line-height: 1;
         }
 
         .stat-label {
-          font-size: 0.875rem;
-          color: #64748b;
+          font-size: 0.9rem;
+          color: var(--muted);
           font-weight: 500;
+          margin-top: 4px;
         }
 
         /* Tab Navigation */
@@ -970,18 +1024,16 @@ export default function Admin() {
         }
 
         .upload-section {
-          background: var(--card);
-          border-radius: 16px;
-          padding: 32px;
-          margin-bottom: 40px;
-          box-shadow: var(--shadow);
+          background: white;
+          padding: 60px 0;
         }
 
         .upload-section h2 {
-          font-size: 24px;
-          font-weight: 600;
-          color: var(--nav);
-          margin: 0 0 24px;
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 40px;
+          color: #0f172a;
         }
 
         .upload-form {
@@ -1050,17 +1102,16 @@ export default function Admin() {
         }
 
         .images-section {
-          background: var(--card);
-          border-radius: 16px;
-          padding: 32px;
-          box-shadow: var(--shadow);
+          background: white;
+          padding: 60px 0;
         }
 
         .images-section h2 {
-          font-size: 24px;
-          font-weight: 600;
-          color: var(--nav);
-          margin: 0 0 8px;
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 20px;
+          color: #0f172a;
         }
 
         .drag-hint {
@@ -1169,17 +1220,16 @@ export default function Admin() {
 
         /* Messages Section Styles */
         .messages-section {
-          background: var(--card);
-          border-radius: 16px;
-          padding: 32px;
-          box-shadow: var(--shadow);
+          background: white;
+          padding: 60px 0;
         }
 
         .messages-section h2 {
-          font-size: 24px;
-          font-weight: 600;
-          color: var(--nav);
-          margin: 0 0 24px;
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 40px;
+          color: #0f172a;
         }
 
         .no-messages {
@@ -1484,38 +1534,42 @@ export default function Admin() {
         }
 
         @media (max-width: 768px) {
-          .admin-container {
-            padding: 20px 16px;
+          .admin-hero-section {
+            padding: 80px 0 40px;
           }
 
-          .header-content {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 24px;
+          .admin-hero-section .section-header h1 {
+            font-size: 2.5rem;
           }
 
-          .header-stats {
-            width: 100%;
-            justify-content: space-between;
+          .admin-hero-section .section-header p {
+            font-size: 1rem;
           }
 
-          .stat-card {
-            flex: 1;
-            min-width: 0;
+          .admin-tabs-section {
+            padding: 30px 0;
           }
 
-          .section-cards {
-            grid-template-columns: 1fr;
-            gap: 16px;
+          .tab-navigation {
+            gap: 6px;
           }
 
-          .section-card {
-            padding: 20px;
+          .tab-btn {
+            padding: 10px 16px;
+            font-size: 12px;
           }
 
           .upload-section,
-          .images-section {
-            padding: 24px;
+          .images-section,
+          .messages-section {
+            padding: 40px 0;
+          }
+
+          .upload-section h2,
+          .images-section h2,
+          .messages-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
           }
 
           .images-grid {

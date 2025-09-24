@@ -233,40 +233,6 @@ export default function Contact() {
                     </button>
                   </div>
                 </div>
-                <div className="map-info">
-                  <div className="location-details">
-                    <h3>📍 Kevin Industries</h3>
-                    <div className="map-actions">
-                      <button 
-                        className="directions-btn"
-                        onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=22.2941624,70.8223865', '_blank')}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                          <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Get Directions
-                      </button>
-                      <button 
-                        className="share-btn"
-                         onClick={() => navigator.share ? navigator.share({
-                           title: 'Kevin Industries Location',
-                           text: 'Visit Kevin Industries at Dall Mill Compound, Near Faruki Masjid, Dushsagar Road, Rajkot, Gujarat',
-                           url: 'https://maps.app.goo.gl/uDw64AaMDN6X9H4G7'
-                         }) : navigator.clipboard.writeText('https://maps.app.goo.gl/uDw64AaMDN6X9H4G7')}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <circle cx="18" cy="5" r="3"/>
-                          <circle cx="6" cy="12" r="3"/>
-                          <circle cx="18" cy="19" r="3"/>
-                          <path d="m8.59 13.51 6.83 3.98"/>
-                          <path d="m15.41 6.51-6.83 3.98"/>
-                        </svg>
-                        Share Location
-                      </button>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -587,10 +553,7 @@ export default function Contact() {
           }
 
           .map-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 32px;
-            align-items: start;
+            display: block;
           }
 
           .map-wrapper {
