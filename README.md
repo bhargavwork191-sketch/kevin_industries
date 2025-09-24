@@ -10,13 +10,15 @@ This project is a Next.js conversion of the static Kevin Industries site, wired 
 NEXT_PUBLIC_SUPABASE_URL=your_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_public_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_admin_password
 ```
 
 3. Run `npm run dev` and open [http://localhost:3000](http://localhost:3000)
 
 - Home page carousel pulls from `images` table in Supabase.
 - Contact form submissions are stored in `contacts` table.
-- Admin panel (`/admin?pw=admin123`) uploads images to Supabase Storage (bucket `website-images`) and stores metadata in `images` table.
+- Admin panel (`/admin`) uploads images to Supabase Storage (bucket `website-images`) and stores metadata in `images` table. Access requires login with credentials set in environment variables.
 
 ## Deployment
 - Push to GitHub, connect repo to Vercel.

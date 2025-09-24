@@ -38,19 +38,38 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false)
   }
 
-  const login = (username, password) => {
-    if (username === 'kevin123' && password === 'Kevin@1234') {
-      localStorage.setItem('adminLoggedIn', 'true')
-      localStorage.setItem('adminLoginTime', Date.now().toString())
-      setIsAuthenticated(true)
-      return true
+  const login = async (username, password) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem('adminLoggedIn', 'true')
+        localStorage.setItem('adminLoginTime', Date.now().toString())
+        localStorage.setItem('adminSessionToken', data.sessionToken)
+        setIsAuthenticated(true)
+        return true
+      } else {
+        console.error('Login failed:', data.error)
+        return false
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      return false
     }
-    return false
   }
 
   const logout = () => {
     localStorage.removeItem('adminLoggedIn')
     localStorage.removeItem('adminLoginTime')
+    localStorage.removeItem('adminSessionToken')
     setIsAuthenticated(false)
   }
 

@@ -46,6 +46,7 @@ export default function Layout({ children }) {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+
   const handleLoginClick = () => {
     setShowLoginModal(true);
     setLoginError('');
@@ -71,13 +72,18 @@ export default function Layout({ children }) {
     setIsLoggingIn(true);
     setLoginError('');
 
-    const success = login(loginCredentials.username, loginCredentials.password);
-    
-    if (success) {
-      setShowLoginModal(false);
-      setLoginCredentials({ username: '', password: '' });
-    } else {
-      setLoginError('Invalid username or password');
+    try {
+      const success = await login(loginCredentials.username, loginCredentials.password);
+      
+      if (success) {
+        setShowLoginModal(false);
+        setLoginCredentials({ username: '', password: '' });
+      } else {
+        setLoginError('Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginError('Login failed. Please try again.');
     }
     
     setIsLoggingIn(false);
@@ -169,54 +175,55 @@ export default function Layout({ children }) {
           </div>
         </div>
 
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          <div className="mobile-menu-overlay" onClick={() => setIsMobileMenuOpen(false)}>
-            <div className="mobile-menu-content" onClick={(e) => e.stopPropagation()}>
-              <div className="mobile-nav-links">
-                <Link href="/" className={`mobile-nav-link ${isActive('/') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-                <Link href="/about" className={`mobile-nav-link ${isActive('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-                <Link href="/gallery" className={`mobile-nav-link ${isActive('/gallery') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
-                <Link href="/processes" className={`mobile-nav-link ${isActive('/processes') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Processes</Link>
-                <Link href="/contact" className={`mobile-nav-link ${isActive('/contact') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-              </div>
-              
-              {/* Mobile Admin Section */}
-              <div className="mobile-admin-section">
-                {isAuthenticated ? (
-                  <>
-                    <Link href="/admin" className="mobile-admin-link" onClick={() => setIsMobileMenuOpen(false)}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      Admin Dashboard
-                    </Link>
-                    <button className="mobile-logout-link" onClick={handleLogoutClick}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <button className="mobile-admin-link" onClick={() => { handleLoginClick(); setIsMobileMenuOpen(false); }}>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu-overlay" onClick={() => setIsMobileMenuOpen(false)}>
+          <div className="mobile-menu-content" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-nav-links">
+              <Link href="/" className={`mobile-nav-link ${isActive('/') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+              <Link href="/about" className={`mobile-nav-link ${isActive('/about') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+              <Link href="/gallery" className={`mobile-nav-link ${isActive('/gallery') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
+              <Link href="/processes" className={`mobile-nav-link ${isActive('/processes') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Processes</Link>
+              <Link href="/contact" className={`mobile-nav-link ${isActive('/contact') ? 'active' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+            </div>
+            
+            {/* Mobile Admin Section */}
+            <div className="mobile-admin-section">
+              {isAuthenticated ? (
+                <>
+                  <Link href="/admin" className="mobile-admin-link" onClick={() => setIsMobileMenuOpen(false)}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <polyline points="10,17 15,12 10,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <line x1="15" y1="12" x2="3" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Login as Admin
+                    Admin Dashboard
+                  </Link>
+                  <button className="mobile-logout-link" onClick={handleLogoutClick}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Logout
                   </button>
-                )}
-              </div>
+                </>
+              ) : (
+                <button className="mobile-admin-link" onClick={() => { handleLoginClick(); setIsMobileMenuOpen(false); }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="10,17 15,12 10,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <line x1="15" y1="12" x2="3" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Login as Admin
+                </button>
+              )}
             </div>
           </div>
-        )}
-      </header>
+        </div>
+      )}
 
       {/* Mobile Bottom Navigation */}
       <div className="mobile-bottom-nav">
@@ -443,11 +450,10 @@ export default function Layout({ children }) {
                   <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <h3>Confirm Logout</h3>
+              <h3>Logout</h3>
             </div>
             <div className="modal-body">
-              <p>Are you sure you want to logout from the admin panel?</p>
-              <p className="modal-subtitle">You will need to login again to access admin features.</p>
+              <p>Are you sure you want to logout?</p>
             </div>
             <div className="modal-actions">
               <button 
@@ -460,11 +466,6 @@ export default function Layout({ children }) {
                 className="modal-btn confirm-btn logout-confirm" 
                 onClick={handleLogoutConfirm}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="16,17 21,12 16,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
                 Logout
               </button>
             </div>

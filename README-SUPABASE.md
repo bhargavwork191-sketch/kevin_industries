@@ -168,12 +168,16 @@ Add these in your Vercel project settings:
 - `SMTP_USER`
 - `SMTP_PASS`
 - `ADMIN_EMAIL`
+- `ADMIN_USERNAME` (for admin panel access)
+- `ADMIN_PASSWORD` (for admin panel access)
 
 ## 🔧 Admin Access
 
 - **URL**: `/admin`
-- **Username**: `kevin123`
-- **Password**: `Kevin@1234`
+- **Username**: Set via `ADMIN_USERNAME` environment variable (default: `kevin123`)
+- **Password**: Set via `ADMIN_PASSWORD` environment variable (default: `Kevin@1234`)
+
+**Note**: Admin credentials are now stored securely in environment variables and not exposed to the client-side code.
 
 ## 📊 Data Flow Diagram
 
