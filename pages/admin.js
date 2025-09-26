@@ -164,11 +164,11 @@ export default function Admin() {
     const vercelLimit = 4.5 * 1024 * 1024 // 4.5MB Vercel limit
     const maxSize = 50 * 1024 * 1024 // 50MB our limit
     
-    // TEMPORARILY COMMENTED OUT - 4.5MB Vercel limit check
-    // if (selectedFile.size > vercelLimit) {
-    //   alert(`File too large for upload! Maximum size is 4.5MB due to server limitations. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.\n\nPlease compress your PDF using an online PDF compressor or reduce the file size.`)
-    //   return
-    // }
+    // 4.5MB Vercel limit check
+    if (selectedFile.size > vercelLimit) {
+      alert(`File too large for upload! Maximum size is 4.5MB due to server limitations. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.\n\nPlease compress your PDF using an online PDF compressor or reduce the file size.`)
+      return
+    }
     
     if (selectedFile.size > maxSize) {
       alert(`File too large! Maximum file size is 50MB. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.`)
@@ -566,8 +566,23 @@ export default function Admin() {
                   {uploading ? 'Uploading...' : (activeTab === 'company-profile' ? 'Upload PDF' : 'Upload Image')}
                 </button>
                 {selectedFile && (
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                    Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)}MB)
+                  <div style={{ fontSize: '12px', marginTop: '8px' }}>
+                    <div style={{ color: '#666' }}>
+                      Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)}MB)
+                    </div>
+                    {selectedFile.size > 4.5 * 1024 * 1024 && (
+                      <div style={{ color: '#dc2626', fontWeight: 'bold', marginTop: '4px' }}>
+                        ⚠️ Too large for upload! (Max: 4.5MB)
+                      </div>
+                    )}
+                    {selectedFile.size > 2 * 1024 * 1024 && selectedFile.size <= 4.5 * 1024 * 1024 && (
+                      <div style={{ color: '#f59e0b', fontWeight: 'bold', marginTop: '4px' }}>
+                        ⚠️ Large file - may cause issues
+                      </div>
+                    )}
+                    <div style={{ color: '#6b7280', fontSize: '11px', marginTop: '2px' }}>
+                      Maximum file size: 4.5MB (Vercel limit)
+                    </div>
                   </div>
                 )}
               </div>

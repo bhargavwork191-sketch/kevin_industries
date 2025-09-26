@@ -19,15 +19,15 @@ export default async function handler(req, res) {
   const contentLength = parseInt(req.headers['content-length'] || '0')
   console.log('📏 Request content-length:', contentLength, 'bytes')
   
-  // TEMPORARILY COMMENTED OUT - 4.5MB Vercel limit check
-  // if (contentLength > 4.5 * 1024 * 1024) { // 4.5MB Vercel limit
-  //   console.log('❌ Request too large for Vercel:', contentLength)
-  //   return res.status(413).json({ 
-  //     error: 'File too large for serverless function. Maximum size is 4.5MB. Please compress your PDF or use a smaller file.',
-  //     fileSize: contentLength,
-  //     maxSize: 4.5 * 1024 * 1024
-  //   })
-  // }
+  // 4.5MB Vercel limit check
+  if (contentLength > 4.5 * 1024 * 1024) { // 4.5MB Vercel limit
+    console.log('❌ Request too large for Vercel:', contentLength)
+    return res.status(413).json({ 
+      error: 'File too large for serverless function. Maximum size is 4.5MB. Please compress your PDF or use a smaller file.',
+      fileSize: contentLength,
+      maxSize: 4.5 * 1024 * 1024
+    })
+  }
   
   if (req.method === 'GET') {
     try {
@@ -192,7 +192,7 @@ export default async function handler(req, res) {
       }
 
       // Get the company profile to get storage path
-      const { data: profile, error: fetchError } = await supabase
+      const { data: profile, error: fetchError } = await supabaseAdmin
         .from('company_profile')
         .select('storage_path')
         .eq('id', id)
@@ -204,7 +204,7 @@ export default async function handler(req, res) {
       }
 
       // Delete from storage
-      const { error: storageError } = await supabase.storage
+      const { error: storageError } = await supabaseAdmin.storage
         .from('company-profile')
         .remove([profile.storage_path])
 
@@ -213,7 +213,7 @@ export default async function handler(req, res) {
       }
 
       // Delete from database
-      const { error: deleteError } = await supabase
+      const { error: deleteError } = await supabaseAdmin
         .from('company_profile')
         .delete()
         .eq('id', id)

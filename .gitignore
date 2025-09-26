@@ -2,3 +2,5 @@ node_modules
 .next
 /data
 .DS_Store
+.env.local
+Screenshot*.png
