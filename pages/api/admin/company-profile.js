@@ -17,14 +17,17 @@ export default async function handler(req, res) {
   
   // Check if request is too large before processing
   const contentLength = parseInt(req.headers['content-length'] || '0')
-  if (contentLength > 4.5 * 1024 * 1024) { // 4.5MB Vercel limit
-    console.log('❌ Request too large for Vercel:', contentLength)
-    return res.status(413).json({ 
-      error: 'File too large for serverless function. Maximum size is 4.5MB. Please compress your PDF or use a smaller file.',
-      fileSize: contentLength,
-      maxSize: 4.5 * 1024 * 1024
-    })
-  }
+  console.log('📏 Request content-length:', contentLength, 'bytes')
+  
+  // TEMPORARILY COMMENTED OUT - 4.5MB Vercel limit check
+  // if (contentLength > 4.5 * 1024 * 1024) { // 4.5MB Vercel limit
+  //   console.log('❌ Request too large for Vercel:', contentLength)
+  //   return res.status(413).json({ 
+  //     error: 'File too large for serverless function. Maximum size is 4.5MB. Please compress your PDF or use a smaller file.',
+  //     fileSize: contentLength,
+  //     maxSize: 4.5 * 1024 * 1024
+  //   })
+  // }
   
   if (req.method === 'GET') {
     try {
@@ -51,6 +54,8 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
+      console.log('📤 Starting PDF upload process...')
+      
       // Parse the multipart form data
       const form = formidable({
         maxFileSize: 50 * 1024 * 1024, // 50MB
@@ -58,6 +63,7 @@ export default async function handler(req, res) {
       })
 
       const [fields, files] = await form.parse(req)
+      console.log('📁 Form parsed successfully')
       
       const file = files.file?.[0]
       if (!file) {
@@ -84,9 +90,12 @@ export default async function handler(req, res) {
       const storagePath = `company-profile/${filename}`
 
       // Read the file buffer
+      console.log('📖 Reading file buffer...')
       const fileBuffer = fs.readFileSync(file.filepath)
+      console.log('📦 File buffer size:', fileBuffer.length, 'bytes')
       
       // Upload file to Supabase Storage
+      console.log('☁️ Uploading to Supabase Storage...')
       const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
         .from('company-profile')
         .upload(storagePath, fileBuffer, {
@@ -104,11 +113,26 @@ export default async function handler(req, res) {
         .from('company-profile')
         .getPublicUrl(storagePath)
 
+      // Get existing company profiles before deactivating
+      const { data: existingProfiles } = await supabaseAdmin
+        .from('company_profile')
+        .select('storage_path')
+        .eq('is_active', true)
+
       // Deactivate all existing company profiles
       await supabaseAdmin
         .from('company_profile')
         .update({ is_active: false })
         .eq('is_active', true)
+
+      // Clean up old files from storage
+      if (existingProfiles && existingProfiles.length > 0) {
+        const oldPaths = existingProfiles.map(profile => profile.storage_path)
+        console.log('🗑️ Cleaning up old files:', oldPaths)
+        await supabaseAdmin.storage
+          .from('company-profile')
+          .remove(oldPaths)
+      }
 
       // Create a user-friendly filename for download
       const userFriendlyFilename = file.originalFilename 

@@ -18,6 +18,8 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('gallery')
   const [draggedItem, setDraggedItem] = useState(null)
   const [selectedMessage, setSelectedMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [showSuccess, setShowSuccess] = useState(false)
   const [touchStartX, setTouchStartX] = useState(0)
   const [touchEndX, setTouchEndX] = useState(0)
 
@@ -129,6 +131,25 @@ export default function Admin() {
     }
   }
 
+  const resetForm = () => {
+    console.log('🔄 Resetting form state...')
+    setSelectedFile(null)
+    setImagePreview(null)
+    const fileInput = document.getElementById('fileInput')
+    if (fileInput) {
+      fileInput.value = ''
+    }
+  }
+
+  const showSuccessNotification = (message) => {
+    setSuccessMessage(message)
+    setShowSuccess(true)
+    setTimeout(() => {
+      setShowSuccess(false)
+      setSuccessMessage('')
+    }, 5000) // Hide after 5 seconds
+  }
+
   const handleUpload = async () => {
     console.log('🚀 Upload button clicked!')
     console.log('📁 Selected file:', selectedFile)
@@ -143,10 +164,11 @@ export default function Admin() {
     const vercelLimit = 4.5 * 1024 * 1024 // 4.5MB Vercel limit
     const maxSize = 50 * 1024 * 1024 // 50MB our limit
     
-    if (selectedFile.size > vercelLimit) {
-      alert(`File too large for upload! Maximum size is 4.5MB due to server limitations. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.\n\nPlease compress your PDF using an online PDF compressor or reduce the file size.`)
-      return
-    }
+    // TEMPORARILY COMMENTED OUT - 4.5MB Vercel limit check
+    // if (selectedFile.size > vercelLimit) {
+    //   alert(`File too large for upload! Maximum size is 4.5MB due to server limitations. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.\n\nPlease compress your PDF using an online PDF compressor or reduce the file size.`)
+    //   return
+    // }
     
     if (selectedFile.size > maxSize) {
       alert(`File too large! Maximum file size is 50MB. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.`)
@@ -155,6 +177,10 @@ export default function Admin() {
 
     console.log('📤 Starting upload...')
     setUploading(true)
+    
+    // Add a small delay to ensure any previous operations are complete
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
     const formData = new FormData()
     
     if (activeTab === 'company-profile') {
@@ -169,42 +195,70 @@ export default function Admin() {
     try {
       const endpoint = activeTab === 'company-profile' ? '/api/admin/company-profile' : '/api/admin/images'
       console.log('🌐 Sending request to', endpoint)
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: formData
-      })
+      
+      // Add retry mechanism for 413 errors
+      let response
+      let retryCount = 0
+      const maxRetries = 2
+      
+      while (retryCount <= maxRetries) {
+        // Add cache-busting parameter
+        const url = retryCount > 0 ? `${endpoint}?retry=${retryCount}&t=${Date.now()}` : endpoint
+        
+        response = await fetch(url, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        })
+        
+        if (response.status === 413 && retryCount < maxRetries) {
+          console.log(`🔄 Retry ${retryCount + 1}/${maxRetries} for 413 error...`)
+          retryCount++
+          await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second
+          continue
+        }
+        break
+      }
 
       console.log('📡 Response status:', response.status)
       if (response.ok) {
         console.log('✅ Upload successful!')
         if (activeTab === 'company-profile') {
           await loadCompanyProfile()
+          showSuccessNotification('Company Profile PDF uploaded successfully!')
         } else {
           await loadImages()
+          showSuccessNotification('Image uploaded successfully!')
         }
-        setSelectedFile(null)
-        setImagePreview(null)
-        document.getElementById('fileInput').value = ''
+        resetForm()
       } else {
         console.log('❌ Upload failed with status:', response.status)
         try {
           const errorData = await response.json()
           if (response.status === 413) {
-            alert(`File too large! ${errorData.error || 'Maximum file size is 50MB.'}`)
+            alert(`File too large! ${errorData.error || 'Please try a smaller file.'}`)
           } else {
             alert(`Error uploading file: ${errorData.error || 'Unknown error'}`)
           }
         } catch (parseError) {
           if (response.status === 413) {
-            alert('File too large! Maximum file size is 50MB.')
+            alert('File too large! Please try a smaller file.')
           } else {
             alert('Error uploading file. Please try again.')
           }
         }
+        
+        // Reset form state on error
+        resetForm()
       }
     } catch (error) {
       console.error('💥 Error uploading file:', error)
       alert('Error uploading file')
+      
+      // Reset form state on error
+      resetForm()
     }
     setUploading(false)
   }
@@ -406,6 +460,22 @@ export default function Admin() {
     <Layout>
       <main>
         <div className="admin-container">
+          {/* Success Notification */}
+          {showSuccess && (
+            <div className="success-notification">
+              <div className="success-content">
+                <span className="success-icon">✅</span>
+                <span className="success-message">{successMessage}</span>
+                <button 
+                  className="success-close" 
+                  onClick={() => setShowSuccess(false)}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
+          
           {/* Admin Header */}
           <section className="admin-hero-section">
             <div className="container">
@@ -498,12 +568,6 @@ export default function Admin() {
                 {selectedFile && (
                   <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
                     Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)}MB)
-                    {selectedFile.size > 4.5 * 1024 * 1024 && (
-                      <span style={{ color: '#ef4444', fontWeight: 'bold' }}> - Too large for upload! (Max: 4.5MB)</span>
-                    )}
-                    {selectedFile.size > 50 * 1024 * 1024 && selectedFile.size <= 4.5 * 1024 * 1024 && (
-                      <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> - Large file</span>
-                    )}
                   </div>
                 )}
               </div>
@@ -720,6 +784,78 @@ export default function Admin() {
           max-width: 1200px;
           margin: 0 auto;
           padding: 0;
+          position: relative;
+        }
+
+        .success-notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 1000;
+          background: #10b981;
+          color: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          animation: slideIn 0.3s ease-out;
+        }
+
+        .success-content {
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          gap: 8px;
+        }
+
+        .success-icon {
+          font-size: 18px;
+        }
+
+        .success-message {
+          font-weight: 500;
+          font-size: 14px;
+        }
+
+        .success-close {
+          background: none;
+          border: none;
+          color: white;
+          font-size: 20px;
+          cursor: pointer;
+          padding: 0;
+          margin-left: 8px;
+          opacity: 0.8;
+          transition: opacity 0.2s;
+        }
+
+        .success-close:hover {
+          opacity: 1;
+        }
+
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .success-notification {
+            top: 10px;
+            right: 10px;
+            left: 10px;
+          }
+          
+          .success-content {
+            padding: 10px 12px;
+          }
+          
+          .success-message {
+            font-size: 13px;
+          }
         }
 
         /* Admin Hero Section - Same as other pages */
