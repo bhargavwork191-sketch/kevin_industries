@@ -6,10 +6,26 @@ import fs from 'fs'
 export const config = {
   api: {
     bodyParser: false,
+    responseLimit: false,
   },
 }
 
 export default async function handler(req, res) {
+  console.log('📡 API Route hit:', req.method, req.url)
+  console.log('📏 Content-Length:', req.headers['content-length'])
+  console.log('📏 Content-Type:', req.headers['content-type'])
+  
+  // Check if request is too large before processing
+  const contentLength = parseInt(req.headers['content-length'] || '0')
+  if (contentLength > 4.5 * 1024 * 1024) { // 4.5MB Vercel limit
+    console.log('❌ Request too large for Vercel:', contentLength)
+    return res.status(413).json({ 
+      error: 'File too large for serverless function. Maximum size is 4.5MB. Please compress your PDF or use a smaller file.',
+      fileSize: contentLength,
+      maxSize: 4.5 * 1024 * 1024
+    })
+  }
+  
   if (req.method === 'GET') {
     try {
       // Get the current active company profile
@@ -37,7 +53,7 @@ export default async function handler(req, res) {
     try {
       // Parse the multipart form data
       const form = formidable({
-        maxFileSize: 10 * 1024 * 1024, // 10MB
+        maxFileSize: 50 * 1024 * 1024, // 50MB
         filter: ({ mimetype }) => mimetype === 'application/pdf'
       })
 
@@ -51,6 +67,15 @@ export default async function handler(req, res) {
       // Validate file type
       if (file.mimetype !== 'application/pdf') {
         return res.status(400).json({ error: 'Only PDF files are allowed' })
+      }
+
+      // Check file size
+      if (file.size > 50 * 1024 * 1024) { // 50MB
+        return res.status(413).json({ 
+          error: 'File too large. Maximum size allowed is 50MB.',
+          fileSize: file.size,
+          maxSize: 50 * 1024 * 1024
+        })
       }
 
       // Generate unique filename

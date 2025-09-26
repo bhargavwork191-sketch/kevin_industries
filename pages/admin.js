@@ -139,6 +139,20 @@ export default function Admin() {
       return
     }
 
+    // Check file size before upload
+    const vercelLimit = 4.5 * 1024 * 1024 // 4.5MB Vercel limit
+    const maxSize = 50 * 1024 * 1024 // 50MB our limit
+    
+    if (selectedFile.size > vercelLimit) {
+      alert(`File too large for upload! Maximum size is 4.5MB due to server limitations. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.\n\nPlease compress your PDF using an online PDF compressor or reduce the file size.`)
+      return
+    }
+    
+    if (selectedFile.size > maxSize) {
+      alert(`File too large! Maximum file size is 50MB. Your file is ${(selectedFile.size / 1024 / 1024).toFixed(2)}MB.`)
+      return
+    }
+
     console.log('📤 Starting upload...')
     setUploading(true)
     const formData = new FormData()
@@ -173,8 +187,20 @@ export default function Admin() {
         document.getElementById('fileInput').value = ''
       } else {
         console.log('❌ Upload failed with status:', response.status)
-        const errorData = await response.json()
-        alert(`Error uploading file: ${errorData.error || 'Unknown error'}`)
+        try {
+          const errorData = await response.json()
+          if (response.status === 413) {
+            alert(`File too large! ${errorData.error || 'Maximum file size is 50MB.'}`)
+          } else {
+            alert(`Error uploading file: ${errorData.error || 'Unknown error'}`)
+          }
+        } catch (parseError) {
+          if (response.status === 413) {
+            alert('File too large! Maximum file size is 50MB.')
+          } else {
+            alert('Error uploading file. Please try again.')
+          }
+        }
       }
     } catch (error) {
       console.error('💥 Error uploading file:', error)
@@ -469,9 +495,17 @@ export default function Admin() {
                 >
                   {uploading ? 'Uploading...' : (activeTab === 'company-profile' ? 'Upload PDF' : 'Upload Image')}
                 </button>
-                <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                  Debug: selectedFile={selectedFile ? 'Yes' : 'No'}, uploading={uploading ? 'Yes' : 'No'}
-                </div>
+                {selectedFile && (
+                  <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
+                    Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)}MB)
+                    {selectedFile.size > 4.5 * 1024 * 1024 && (
+                      <span style={{ color: '#ef4444', fontWeight: 'bold' }}> - Too large for upload! (Max: 4.5MB)</span>
+                    )}
+                    {selectedFile.size > 50 * 1024 * 1024 && selectedFile.size <= 4.5 * 1024 * 1024 && (
+                      <span style={{ color: '#f59e0b', fontWeight: 'bold' }}> - Large file</span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </section>
