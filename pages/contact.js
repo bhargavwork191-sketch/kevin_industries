@@ -1,4 +1,5 @@
 import Layout from '../components/Layout'
+import CompanyProfileDownload from '../components/CompanyProfileDownload'
 import { useState } from 'react'
 
 export default function Contact() {
@@ -202,6 +203,21 @@ export default function Contact() {
             </div>
           </section>
 
+          {/* Company Brochure Section */}
+          <section className="brochure-section">
+            <div className="container">
+              <div className="brochure-content">
+                <div className="brochure-text">
+                  <h2>Company Information</h2>
+                  <p>Access our detailed company brochure with technical specifications, service capabilities, and contact details.</p>
+                </div>
+                <div className="brochure-action">
+                  <CompanyProfileDownload />
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Map Section */}
           <section className="map-section">
             <div className="container">
@@ -289,11 +305,42 @@ export default function Contact() {
           .hero-subtitle {
             font-size: 1.25rem;
             color: #cbd5e1;
-            margin: 0 0 48px 0;
+            margin: 0 0 24px 0;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
             line-height: 1.6;
+          }
+
+          /* Company Brochure Section */
+          .brochure-section {
+            background: #f8fafc;
+            padding: 60px 0;
+          }
+
+          .brochure-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+          }
+
+          .brochure-text h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+          }
+
+          .brochure-text p {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+          }
+
+          .brochure-action {
+            flex-shrink: 0;
           }
 
           .contact-stats {
@@ -870,6 +917,20 @@ export default function Contact() {
 
             .contact-hero {
               padding: 50px 0;
+            }
+
+            .brochure-section {
+              padding: 40px 0;
+            }
+
+            .brochure-content {
+              flex-direction: column;
+              text-align: center;
+              gap: 24px;
+            }
+
+            .brochure-text h2 {
+              font-size: 1.75rem;
             }
 
             .hero-content h1 {

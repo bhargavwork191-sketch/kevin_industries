@@ -10,6 +10,7 @@ export default function Admin() {
   const [excellenceImages, setExcellenceImages] = useState([])
   const [carosalImages, setCarosalImages] = useState([])
   const [contactMessages, setContactMessages] = useState([])
+  const [companyProfile, setCompanyProfile] = useState(null)
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
@@ -27,10 +28,11 @@ export default function Admin() {
     }
   }, [isLoading, isAuthenticated, router])
 
-  // Load existing images
+  // Load existing images and company profile
   useEffect(() => {
     if (isAuthenticated) {
       loadImages()
+      loadCompanyProfile()
     }
   }, [isAuthenticated])
 
@@ -59,14 +61,14 @@ export default function Admin() {
 
     if (isLeftSwipe) {
       // Swipe left - go to next tab
-      const tabs = ['gallery', 'excellence', 'carosal', 'messages']
+      const tabs = ['gallery', 'excellence', 'carosal', 'messages', 'company-profile']
       const currentIndex = tabs.indexOf(activeTab)
       if (currentIndex < tabs.length - 1) {
         setActiveTab(tabs[currentIndex + 1])
       }
     } else if (isRightSwipe) {
       // Swipe right - go to previous tab
-      const tabs = ['gallery', 'excellence', 'carosal', 'messages']
+      const tabs = ['gallery', 'excellence', 'carosal', 'messages', 'company-profile']
       const currentIndex = tabs.indexOf(activeTab)
       if (currentIndex > 0) {
         setActiveTab(tabs[currentIndex - 1])
@@ -102,6 +104,16 @@ export default function Admin() {
     setLoading(false)
   }
 
+  const loadCompanyProfile = async () => {
+    try {
+      const response = await fetch('/api/admin/company-profile')
+      const data = await response.json()
+      setCompanyProfile(data)
+    } catch (error) {
+      console.error('Error loading company profile:', error)
+    }
+  }
+
   const handleFileSelect = (event) => {
     console.log('📁 File input changed')
     const file = event.target.files[0]
@@ -130,12 +142,20 @@ export default function Admin() {
     console.log('📤 Starting upload...')
     setUploading(true)
     const formData = new FormData()
-    formData.append('image', selectedFile)
-    formData.append('type', activeTab)
+    
+    if (activeTab === 'company-profile') {
+      formData.append('file', selectedFile)
+      formData.append('title', 'Company Profile')
+      formData.append('description', 'Company profile document')
+    } else {
+      formData.append('image', selectedFile)
+      formData.append('type', activeTab)
+    }
 
     try {
-      console.log('🌐 Sending request to /api/admin/images')
-      const response = await fetch('/api/admin/images', {
+      const endpoint = activeTab === 'company-profile' ? '/api/admin/company-profile' : '/api/admin/images'
+      console.log('🌐 Sending request to', endpoint)
+      const response = await fetch(endpoint, {
         method: 'POST',
         body: formData
       })
@@ -143,17 +163,22 @@ export default function Admin() {
       console.log('📡 Response status:', response.status)
       if (response.ok) {
         console.log('✅ Upload successful!')
-        await loadImages()
+        if (activeTab === 'company-profile') {
+          await loadCompanyProfile()
+        } else {
+          await loadImages()
+        }
         setSelectedFile(null)
         setImagePreview(null)
         document.getElementById('fileInput').value = ''
       } else {
         console.log('❌ Upload failed with status:', response.status)
-        alert('Error uploading image')
+        const errorData = await response.json()
+        alert(`Error uploading file: ${errorData.error || 'Unknown error'}`)
       }
     } catch (error) {
-      console.error('💥 Error uploading image:', error)
-      alert('Error uploading image')
+      console.error('💥 Error uploading file:', error)
+      alert('Error uploading file')
     }
     setUploading(false)
   }
@@ -174,6 +199,25 @@ export default function Admin() {
     } catch (error) {
       console.error('Error deleting image:', error)
       alert('Error deleting image')
+    }
+  }
+
+  const handleDeletePDF = async (pdfId) => {
+    if (!confirm('Are you sure you want to delete this company profile PDF?')) return
+
+    try {
+      const response = await fetch(`/api/admin/company-profile?id=${pdfId}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        await loadCompanyProfile()
+      } else {
+        alert('Error deleting company profile')
+      }
+    } catch (error) {
+      console.error('Error deleting company profile:', error)
+      alert('Error deleting company profile')
     }
   }
 
@@ -374,11 +418,17 @@ export default function Admin() {
               >
                   CONTACT ({contactMessages.length})
                 </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'company-profile' ? 'active' : ''}`}
+                onClick={() => setActiveTab('company-profile')}
+              >
+                  COMPANY PROFILE
+                </button>
                 </div>
                 </div>
           </section>
 
-          {/* Upload Section - Only for Image Tabs */}
+          {/* Upload Section - Only for Image Tabs and Company Profile */}
           {activeTab !== 'messages' && (
             <section className="upload-section">
               <div className="container">
@@ -386,18 +436,19 @@ export default function Admin() {
                 {activeTab === 'gallery' && 'Upload New Gallery Image'}
                 {activeTab === 'excellence' && 'Upload New Excellence Image'}
                 {activeTab === 'carosal' && 'Upload New Carosal Image'}
+                {activeTab === 'company-profile' && 'Upload Company Profile PDF'}
               </h2>
               <div className="upload-form">
                 <div className="file-input-wrapper">
                   <input
                     id="fileInput"
                     type="file"
-                    accept="image/*"
+                    accept={activeTab === 'company-profile' ? 'application/pdf' : 'image/*'}
                     onChange={handleFileSelect}
                     className="file-input"
                   />
                   <label htmlFor="fileInput" className="file-input-label">
-                    Choose Image
+                    {activeTab === 'company-profile' ? 'Choose PDF' : 'Choose Image'}
                   </label>
                 </div>
                 
@@ -416,7 +467,7 @@ export default function Admin() {
                     cursor: (!selectedFile || uploading) ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {uploading ? 'Uploading...' : 'Upload Image'}
+                  {uploading ? 'Uploading...' : (activeTab === 'company-profile' ? 'Upload PDF' : 'Upload Image')}
                 </button>
                 <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
                   Debug: selectedFile={selectedFile ? 'Yes' : 'No'}, uploading={uploading ? 'Yes' : 'No'}
@@ -426,8 +477,53 @@ export default function Admin() {
           </section>
           )}
 
+          {/* Company Profile Section */}
+          {activeTab === 'company-profile' && (
+            <section className="company-profile-section">
+              <div className="container">
+                <h2>Current Company Profile</h2>
+                {loading ? (
+                  <div className="loading">Loading company profile...</div>
+                ) : companyProfile ? (
+                  <div className="company-profile-card">
+                    <div className="profile-info">
+                      <h3>{companyProfile.title}</h3>
+                      <p><strong>Filename:</strong> {companyProfile.original_filename}</p>
+                      <p><strong>File Size:</strong> {(companyProfile.file_size / 1024 / 1024).toFixed(2)} MB</p>
+                      <p><strong>Uploaded:</strong> {new Date(companyProfile.created_at).toLocaleDateString()}</p>
+                      {companyProfile.description && (
+                        <p><strong>Description:</strong> {companyProfile.description}</p>
+                      )}
+                    </div>
+                    <div className="profile-actions">
+                      <a 
+                        href={companyProfile.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="view-btn"
+                      >
+                        View PDF
+                      </a>
+                      <button
+                        onClick={() => handleDeletePDF(companyProfile.id)}
+                        className="delete-btn"
+                      >
+                        Delete PDF
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="no-profile">
+                    <p>No company profile PDF uploaded yet.</p>
+                    <p>Upload a PDF file above to get started.</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
           {/* Images Grid with Drag & Drop */}
-          {activeTab !== 'messages' && (
+          {activeTab !== 'messages' && activeTab !== 'company-profile' && (
             <section className="images-section">
               <div className="container">
                 <h2>Current {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Images ({getCurrentImages().length})</h2>
@@ -1218,6 +1314,100 @@ export default function Admin() {
           box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
+        /* Company Profile Section Styles */
+        .company-profile-section {
+          background: white;
+          padding: 60px 0;
+        }
+
+        .company-profile-section h2 {
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 40px;
+          color: #0f172a;
+        }
+
+        .company-profile-card {
+          background: #fff;
+          border: 1px solid rgba(15, 23, 42, 0.1);
+          border-radius: 12px;
+          padding: 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 30px;
+          box-shadow: var(--shadow);
+          transition: all 0.3s ease;
+        }
+
+        .company-profile-card:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-lg);
+          border-color: var(--accent);
+        }
+
+        .profile-info {
+          flex: 1;
+        }
+
+        .profile-info h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--nav);
+          margin: 0 0 16px 0;
+        }
+
+        .profile-info p {
+          font-size: 14px;
+          color: var(--muted);
+          margin: 8px 0;
+          line-height: 1.5;
+        }
+
+        .profile-info strong {
+          color: var(--nav);
+          font-weight: 600;
+        }
+
+        .profile-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          align-items: flex-end;
+        }
+
+        .view-btn {
+          background: var(--accent);
+          color: white;
+          text-decoration: none;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          display: inline-block;
+        }
+
+        .view-btn:hover {
+          background: var(--accent2);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .no-profile {
+          text-align: center;
+          padding: 60px 40px;
+          color: var(--muted);
+          background: #f8fafc;
+          border-radius: 12px;
+          border: 2px dashed #cbd5e1;
+        }
+
+        .no-profile p {
+          font-size: 16px;
+          margin: 8px 0;
+        }
+
         /* Messages Section Styles */
         .messages-section {
           background: white;
@@ -1561,15 +1751,31 @@ export default function Admin() {
 
           .upload-section,
           .images-section,
-          .messages-section {
+          .messages-section,
+          .company-profile-section {
             padding: 40px 0;
           }
 
           .upload-section h2,
           .images-section h2,
-          .messages-section h2 {
+          .messages-section h2,
+          .company-profile-section h2 {
             font-size: 1.5rem;
             margin-bottom: 30px;
+          }
+
+          .company-profile-card {
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .profile-actions {
+            align-items: stretch;
+          }
+
+          .view-btn,
+          .delete-btn {
+            text-align: center;
           }
 
           .images-grid {
