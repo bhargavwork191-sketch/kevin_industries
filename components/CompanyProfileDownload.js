@@ -85,7 +85,7 @@ export default function CompanyProfileDownload() {
         {downloading ? (
           <>
             <div className="loading-spinner"></div>
-            <span>Downloading...</span>
+            <span className="download-text">Downloading...</span>
           </>
         ) : (
           <>
@@ -94,7 +94,8 @@ export default function CompanyProfileDownload() {
               <polyline points="7,10 12,15 17,10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            <span>Download Our Company Brochure</span>
+            <span className="download-text desktop-text">Download Our Company Brochure</span>
+            <span className="download-text mobile-text">Download</span>
           </>
         )}
       </button>
@@ -196,8 +197,16 @@ export default function CompanyProfileDownload() {
           flex-shrink: 0;
         }
 
-        .download-btn span {
+        .download-text {
           white-space: nowrap;
+        }
+
+        .mobile-text {
+          display: none;
+        }
+
+        .desktop-text {
+          display: inline;
         }
 
         @media (max-width: 768px) {
@@ -206,13 +215,17 @@ export default function CompanyProfileDownload() {
             font-size: 13px;
           }
 
-          .download-btn span {
+          .mobile-text {
+            display: inline;
+          }
+
+          .desktop-text {
             display: none;
           }
 
           .download-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
           }
         }
       `}</style>
