@@ -1,5 +1,6 @@
 import Layout from '../components/Layout'
 import CompanyProfileDownload from '../components/CompanyProfileDownload'
+import DigitalVisitingCardDownload from '../components/DigitalVisitingCardDownload'
 import { useState } from 'react'
 
 export default function Contact() {
@@ -203,6 +204,21 @@ export default function Contact() {
             </div>
           </section>
 
+          {/* Digital Visiting Card Section */}
+          <section className="visiting-card-section">
+            <div className="container">
+              <div className="visiting-card-content">
+                <div className="visiting-card-text">
+                  <h2>Digital Visiting Card</h2>
+                  <p>Download our digital visiting card with complete contact information and company details.</p>
+                </div>
+                <div className="visiting-card-action">
+                  <DigitalVisitingCardDownload />
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Company Brochure Section */}
           <section className="brochure-section">
             <div className="container">
@@ -310,6 +326,39 @@ export default function Contact() {
             margin-left: auto;
             margin-right: auto;
             line-height: 1.6;
+          }
+
+          /* Digital Visiting Card Section */
+          .visiting-card-section {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.05) 0%, rgba(251, 146, 60, 0.05) 100%);
+            padding: 60px 0;
+            border-top: 1px solid rgba(249, 115, 22, 0.1);
+            border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+          }
+
+          .visiting-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+          }
+
+          .visiting-card-text h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+          }
+
+          .visiting-card-text p {
+            font-size: 1rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+          }
+
+          .visiting-card-action {
+            flex-shrink: 0;
           }
 
           /* Company Brochure Section */
@@ -930,6 +979,20 @@ export default function Contact() {
             }
 
             .brochure-text h2 {
+              font-size: 1.75rem;
+            }
+
+            .visiting-card-section {
+              padding: 40px 0;
+            }
+
+            .visiting-card-content {
+              flex-direction: column;
+              text-align: center;
+              gap: 24px;
+            }
+
+            .visiting-card-text h2 {
               font-size: 1.75rem;
             }
 

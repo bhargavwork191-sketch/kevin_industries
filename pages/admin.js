@@ -11,6 +11,7 @@ export default function Admin() {
   const [carosalImages, setCarosalImages] = useState([])
   const [contactMessages, setContactMessages] = useState([])
   const [companyProfile, setCompanyProfile] = useState(null)
+  const [visitingCard, setVisitingCard] = useState(null)
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
@@ -30,11 +31,12 @@ export default function Admin() {
     }
   }, [isLoading, isAuthenticated, router])
 
-  // Load existing images and company profile
+  // Load existing images, company profile, and visiting card
   useEffect(() => {
     if (isAuthenticated) {
       loadImages()
       loadCompanyProfile()
+      loadVisitingCard()
     }
   }, [isAuthenticated])
 
@@ -63,14 +65,14 @@ export default function Admin() {
 
     if (isLeftSwipe) {
       // Swipe left - go to next tab
-      const tabs = ['gallery', 'excellence', 'carosal', 'messages', 'company-profile']
+      const tabs = ['gallery', 'excellence', 'carosal', 'messages', 'company-profile', 'visiting-card']
       const currentIndex = tabs.indexOf(activeTab)
       if (currentIndex < tabs.length - 1) {
         setActiveTab(tabs[currentIndex + 1])
       }
     } else if (isRightSwipe) {
       // Swipe right - go to previous tab
-      const tabs = ['gallery', 'excellence', 'carosal', 'messages', 'company-profile']
+      const tabs = ['gallery', 'excellence', 'carosal', 'messages', 'company-profile', 'visiting-card']
       const currentIndex = tabs.indexOf(activeTab)
       if (currentIndex > 0) {
         setActiveTab(tabs[currentIndex - 1])
@@ -113,6 +115,16 @@ export default function Admin() {
       setCompanyProfile(data)
     } catch (error) {
       console.error('Error loading company profile:', error)
+    }
+  }
+
+  const loadVisitingCard = async () => {
+    try {
+      const response = await fetch('/api/admin/digital-visiting-card')
+      const data = await response.json()
+      setVisitingCard(data)
+    } catch (error) {
+      console.error('Error loading digital visiting card:', error)
     }
   }
 
@@ -187,13 +199,19 @@ export default function Admin() {
       formData.append('file', selectedFile)
       formData.append('title', 'Company Profile')
       formData.append('description', 'Company profile document')
+    } else if (activeTab === 'visiting-card') {
+      formData.append('file', selectedFile)
+      formData.append('title', 'Digital Visiting Card')
+      formData.append('description', 'Digital visiting card')
     } else {
       formData.append('image', selectedFile)
       formData.append('type', activeTab)
     }
 
     try {
-      const endpoint = activeTab === 'company-profile' ? '/api/admin/company-profile' : '/api/admin/images'
+      const endpoint = activeTab === 'company-profile' ? '/api/admin/company-profile' : 
+                      activeTab === 'visiting-card' ? '/api/admin/digital-visiting-card' : 
+                      '/api/admin/images'
       console.log('🌐 Sending request to', endpoint)
       
       // Add retry mechanism for 413 errors
@@ -228,6 +246,9 @@ export default function Admin() {
         if (activeTab === 'company-profile') {
           await loadCompanyProfile()
           showSuccessNotification('Company Profile PDF uploaded successfully!')
+        } else if (activeTab === 'visiting-card') {
+          await loadVisitingCard()
+          showSuccessNotification('Digital Visiting Card PDF uploaded successfully!')
         } else {
           await loadImages()
           showSuccessNotification('Image uploaded successfully!')
@@ -283,21 +304,28 @@ export default function Admin() {
   }
 
   const handleDeletePDF = async (pdfId) => {
-    if (!confirm('Are you sure you want to delete this company profile PDF?')) return
+    const itemType = activeTab === 'company-profile' ? 'company profile' : 'digital visiting card'
+    if (!confirm(`Are you sure you want to delete this ${itemType} PDF?`)) return
 
     try {
-      const response = await fetch(`/api/admin/company-profile?id=${pdfId}`, {
+      const endpoint = activeTab === 'company-profile' ? '/api/admin/company-profile' : '/api/admin/digital-visiting-card'
+      const response = await fetch(`${endpoint}?id=${pdfId}`, {
         method: 'DELETE'
       })
 
       if (response.ok) {
-        await loadCompanyProfile()
+        if (activeTab === 'company-profile') {
+          await loadCompanyProfile()
+        } else if (activeTab === 'visiting-card') {
+          await loadVisitingCard()
+        }
+        showSuccessNotification(`${itemType} deleted successfully!`)
       } else {
-        alert('Error deleting company profile')
+        alert(`Error deleting ${itemType}`)
       }
     } catch (error) {
-      console.error('Error deleting company profile:', error)
-      alert('Error deleting company profile')
+      console.error(`Error deleting ${itemType}:`, error)
+      alert(`Error deleting ${itemType}`)
     }
   }
 
@@ -520,6 +548,12 @@ export default function Admin() {
               >
                   COMPANY PROFILE
                 </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'visiting-card' ? 'active' : ''}`}
+                onClick={() => setActiveTab('visiting-card')}
+              >
+                  VISITING CARD
+                </button>
                 </div>
                 </div>
           </section>
@@ -533,18 +567,19 @@ export default function Admin() {
                 {activeTab === 'excellence' && 'Upload New Excellence Image'}
                 {activeTab === 'carosal' && 'Upload New Carosal Image'}
                 {activeTab === 'company-profile' && 'Upload Company Profile PDF'}
+                {activeTab === 'visiting-card' && 'Upload Digital Visiting Card PDF'}
               </h2>
               <div className="upload-form">
                 <div className="file-input-wrapper">
                   <input
                     id="fileInput"
                     type="file"
-                    accept={activeTab === 'company-profile' ? 'application/pdf' : 'image/*'}
+                    accept={activeTab === 'company-profile' || activeTab === 'visiting-card' ? 'application/pdf' : 'image/*'}
                     onChange={handleFileSelect}
                     className="file-input"
                   />
                   <label htmlFor="fileInput" className="file-input-label">
-                    {activeTab === 'company-profile' ? 'Choose PDF' : 'Choose Image'}
+                    {activeTab === 'company-profile' || activeTab === 'visiting-card' ? 'Choose PDF' : 'Choose Image'}
                   </label>
                 </div>
                 
@@ -635,8 +670,53 @@ export default function Admin() {
             </section>
           )}
 
+          {/* Digital Visiting Card Section */}
+          {activeTab === 'visiting-card' && (
+            <section className="visiting-card-section">
+              <div className="container">
+                <h2>Current Digital Visiting Card</h2>
+                {loading ? (
+                  <div className="loading">Loading digital visiting card...</div>
+                ) : visitingCard ? (
+                  <div className="visiting-card-card">
+                    <div className="card-info">
+                      <h3>{visitingCard.title}</h3>
+                      <p><strong>Filename:</strong> {visitingCard.original_filename}</p>
+                      <p><strong>File Size:</strong> {(visitingCard.file_size / 1024 / 1024).toFixed(2)} MB</p>
+                      <p><strong>Uploaded:</strong> {new Date(visitingCard.created_at).toLocaleDateString()}</p>
+                      {visitingCard.description && (
+                        <p><strong>Description:</strong> {visitingCard.description}</p>
+                      )}
+                    </div>
+                    <div className="card-actions">
+                      <a 
+                        href={visitingCard.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="view-btn"
+                      >
+                        View PDF
+                      </a>
+                      <button
+                        onClick={() => handleDeletePDF(visitingCard.id)}
+                        className="delete-btn"
+                      >
+                        Delete PDF
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="no-card">
+                    <p>No digital visiting card PDF uploaded yet.</p>
+                    <p>Upload a PDF file above to get started.</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
           {/* Images Grid with Drag & Drop */}
-          {activeTab !== 'messages' && activeTab !== 'company-profile' && (
+          {activeTab !== 'messages' && activeTab !== 'company-profile' && activeTab !== 'visiting-card' && (
             <section className="images-section">
               <div className="container">
                 <h2>Current {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Images ({getCurrentImages().length})</h2>
@@ -1589,6 +1669,92 @@ export default function Admin() {
         }
 
         .no-profile p {
+          font-size: 16px;
+          margin: 8px 0;
+        }
+
+        /* Digital Visiting Card Section Styles */
+        .visiting-card-section {
+          background: white;
+          padding: 60px 0;
+        }
+
+        .visiting-card-section h2 {
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 40px;
+          color: #0f172a;
+        }
+
+        .visiting-card-card {
+          background: #fff;
+          border: 1px solid rgba(15, 23, 42, 0.1);
+          border-radius: 12px;
+          padding: 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 30px;
+          box-shadow: var(--shadow);
+          transition: all 0.3s ease;
+        }
+
+        .visiting-card-card:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-lg);
+          border-color: #f97316;
+        }
+
+        .card-info {
+          flex: 1;
+        }
+
+        .card-info h3 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--nav);
+          margin: 0 0 16px 0;
+        }
+
+        .card-info p {
+          font-size: 14px;
+          color: var(--muted);
+          margin: 8px 0;
+          line-height: 1.5;
+        }
+
+        .card-info strong {
+          color: var(--nav);
+          font-weight: 600;
+        }
+
+        .card-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          align-items: flex-end;
+        }
+
+        .card-actions .view-btn {
+          background: #f97316;
+        }
+
+        .card-actions .view-btn:hover {
+          background: #ea580c;
+          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .no-card {
+          text-align: center;
+          padding: 60px 40px;
+          color: var(--muted);
+          background: #f8fafc;
+          border-radius: 12px;
+          border: 2px dashed #cbd5e1;
+        }
+
+        .no-card p {
           font-size: 16px;
           margin: 8px 0;
         }

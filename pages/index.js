@@ -1,6 +1,7 @@
 import Layout from '../components/Layout'
 import Carousel from '../components/Carousel'
 import ExcellenceImages from '../components/ExcellenceImages'
+import DigitalVisitingCardDownload from '../components/DigitalVisitingCardDownload'
 import Link from 'next/link'
 
 export default function Home() {
@@ -34,6 +35,9 @@ export default function Home() {
                       <div className="stat-number">100%</div>
                       <div className="stat-label">Customer Satisfaction</div>
                     </div>
+                  </div>
+                  <div className="hero-downloads">
+                    <DigitalVisitingCardDownload />
                   </div>
                 </div>
               </div>
@@ -477,6 +481,13 @@ export default function Home() {
             color: #e2e8f0;
             font-weight: 600;
             letter-spacing: 0.5px;
+          }
+
+          .hero-downloads {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.7s both;
           }
 
           /* Industrial Components Section */
